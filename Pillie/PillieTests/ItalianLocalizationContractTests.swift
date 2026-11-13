@@ -107,13 +107,9 @@ final class ItalianLocalizationContractTests: XCTestCase {
             PillieLocalization.string("onboarding.welcome.demo.apps_open", locale: italian),
             "Ti viene voglia di aprirle…"
         )
-        XCTAssertEqual(
-            PillieLocalization.string("onboarding.blocking_demo.demo_label", locale: italian),
-            "Demo"
-        )
     }
 
-    func testEarlyValueProofChromeAndHighRiskActionsUseCompactItalianCopy() {
+    func testHighRiskActionsUseCompactItalianCopy() {
         let italian = Locale(identifier: "it_IT")
 
         XCTAssertEqual(
@@ -121,36 +117,8 @@ final class ItalianLocalizationContractTests: XCTestCase {
             "Continua alle notifiche"
         )
         XCTAssertEqual(
-            PillieLocalization.string("onboarding.blocking_demo.shake_title", locale: italian),
-            "Prova a scuotere per confermare"
-        )
-        XCTAssertEqual(
-            PillieLocalization.string("onboarding.blocking_demo.drag_title", locale: italian),
-            "Trascina questo sulle tue app."
-        )
-        XCTAssertEqual(
-            PillieLocalization.string("onboarding.blocking_demo.shake_body", locale: italian),
-            "Scuoti ora il telefono oppure tocca questa scheda."
-        )
-        XCTAssertEqual(
             PillieLocalization.string("today.action.shake", locale: italian),
             "Scuoti per confermare"
-        )
-        XCTAssertEqual(
-            PillieLocalization.string("onboarding.blocking_demo.apps_label", locale: italian),
-            "Le tue app"
-        )
-        XCTAssertEqual(
-            PillieLocalization.string("onboarding.blocking_demo.locked_label", locale: italian),
-            "In pausa"
-        )
-        XCTAssertEqual(
-            PillieLocalization.formatted(
-                "onboarding.blocking_demo.shake_progress",
-                locale: italian,
-                arguments: Int64(2), Int64(3)
-            ),
-            "2 di 3 scosse"
         )
     }
 

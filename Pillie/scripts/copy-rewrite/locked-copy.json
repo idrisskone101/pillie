@@ -1498,46 +1498,6 @@
     {
       "issue": "ENG-73",
       "table": "Localizable",
-      "key": "onboarding.demo.title",
-      "en": "Your day with Pillie",
-      "de": "Dein Tag mit Pillie",
-      "it": "La tua giornata con Pillie"
-    },
-    {
-      "issue": "ENG-73",
-      "table": "Localizable",
-      "key": "onboarding.blocking_demo.title",
-      "en": "Apps pause until you check in.",
-      "de": "Deine Apps pausieren, bis du abhakst.",
-      "it": "Le app restano in pausa finché non confermi."
-    },
-    {
-      "issue": "ENG-73",
-      "table": "Localizable",
-      "key": "onboarding.blocking_demo.body",
-      "en": "Pillie Plus can pause the apps you choose when a reminder goes off. They open again once you check in.",
-      "de": "Pillie Plus kann die Apps pausieren, die du auswählst, sobald eine Erinnerung kommt. Wenn du abhakst, sind sie wieder offen.",
-      "it": "Con Pillie Plus le app che scegli vanno in pausa quando arriva il promemoria. Si riaprono appena confermi."
-    },
-    {
-      "issue": "ENG-73",
-      "table": "Localizable",
-      "key": "onboarding.blocking_demo.drag_title",
-      "en": "Drag this onto your apps.",
-      "de": "Ziehe das auf deine Apps.",
-      "it": "Trascina questo sulle tue app."
-    },
-    {
-      "issue": "ENG-73",
-      "table": "Localizable",
-      "key": "onboarding.demo.explainer",
-      "en": "Pillie reminds you, you check in, and your history fills in.",
-      "de": "Pillie erinnert dich, du hakst ab, und dein Verlauf füllt sich.",
-      "it": "Pillie te lo ricorda, tu confermi e la cronologia si riempie."
-    },
-    {
-      "issue": "ENG-73",
-      "table": "Localizable",
       "key": "accessibility.progress.personalize.title",
       "en": "Personalize your plan.",
       "de": "Mache deinen Plan persönlich.",
@@ -1722,54 +1682,6 @@
       "en": "Your free trial lasts 7 days. No card needed. After it ends, choose monthly, annual, or lifetime to keep Plus.",
       "de": "Deine kostenlose Testphase dauert 7 Tage. Keine Karte nötig. Danach wählst du einen Monats-, Jahres- oder Lifetime-Tarif, um Plus zu behalten.",
       "it": "La prova gratuita dura 7 giorni. Non serve la carta. Quando finisce, scegli mensile, annuale o a vita per tenere Plus."
-    },
-    {
-      "issue": "ENG-73",
-      "table": "Localizable",
-      "key": "onboarding.blocking_setup.skip",
-      "en": "Not now",
-      "de": "Nicht jetzt",
-      "it": "Non ora"
-    },
-    {
-      "issue": "ENG-73",
-      "table": "Localizable",
-      "key": "onboarding.blocking_setup.empty_detail",
-      "en": "Next, Apple asks for Screen Time so the apps can pause. Tap Continue.",
-      "de": "Als Nächstes fragt Apple nach Bildschirmzeit, damit die Apps pausieren können. Tippe auf Weiter.",
-      "it": "Poi Apple chiede Tempo di utilizzo così le app possono andare in pausa. Tocca Continua."
-    },
-    {
-      "issue": "ENG-73",
-      "table": "Localizable",
-      "key": "onboarding.blocking_setup.allow_pausing",
-      "en": "Allow pausing",
-      "de": "Pausieren erlauben",
-      "it": "Consenti la pausa"
-    },
-    {
-      "issue": "ENG-73",
-      "table": "Localizable",
-      "key": "onboarding.blocking_setup.paused_app",
-      "en": "This app is paused",
-      "de": "Diese App ist pausiert",
-      "it": "Questa app è in pausa"
-    },
-    {
-      "issue": "ENG-73",
-      "table": "Localizable",
-      "key": "onboarding.blocking_setup.unlock_hint",
-      "en": "Take your %@ pill to open this app again.",
-      "de": "Nimm deine Pille um %@, dann öffnet sich diese App wieder.",
-      "it": "Prendi la pillola delle %@ per riaprire questa app."
-    },
-    {
-      "issue": "ENG-73",
-      "table": "Localizable",
-      "key": "onboarding.blocking_setup.mark_taken",
-      "en": "I took my pill",
-      "de": "Ich habe meine Pille genommen",
-      "it": "Ho preso la pillola"
     },
     {
       "issue": "ENG-73",
