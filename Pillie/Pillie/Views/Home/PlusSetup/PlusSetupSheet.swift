@@ -79,10 +79,7 @@ struct PlusSetupSheet: View {
         .sheet(item: $editor, onDismiss: editorDismissed) { editor in
             switch editor {
             case .blocking:
-                BlockedAppsEditor()
-                    .presentationDetents([.height(430)])
-                    .presentationDragIndicator(.hidden)
-                    .presentationBackground(PillieTheme.bg)
+                BlockedAppsEditor(surface: .plusSetup)
             case .messages:
                 CustomReminderMessagesEditor(store: store)
                     .presentationDetents([.large])

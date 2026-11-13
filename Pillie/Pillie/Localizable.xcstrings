@@ -87695,6 +87695,275 @@
         }
       }
     },
+    "settings.blocked_apps.lead_in.next": {
+      "comment": "Blocked-apps editor lead-in: what happens after its Continue button, before Screen Time authorization [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple asks next. Tap Continue on its alert."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Poi Apple chiede il permesso. Tocca Continua nel suo avviso."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Als Nächstes fragt Apple. Tippe in der Meldung von Apple auf Weiter."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ensuite, Apple demande ton accord. Touche Continuer dans son alerte."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Después, Apple pide permiso. Toca Continuar en su aviso."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Em seguida, a Apple pede permissão. Toque em Continuar no aviso dela."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daarna vraagt Apple om toestemming. Tik in de melding van Apple op Verder."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sedan ber Apple om tillåtelse. Tryck på Fortsätt i Apples meddelande."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Derefter beder Apple om tilladelse. Tryk på Fortsæt i Apples besked."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deretter ber Apple om tillatelse. Trykk på Fortsett i varselet fra Apple."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seuraavaksi Apple pyytää lupaa. Napauta Applen ilmoituksessa Jatka."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A seguir, a Apple pede autorização. Toca em Continuar no aviso da Apple."
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Després, Apple demana permís. Toca Continuar al seu avís."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Potem Apple poprosi o zgodę. W komunikacie Apple stuknij Dalej."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Poté Apple požádá o svolení. Ve výzvě od Applu klepni na Pokračovat."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Далее Apple запросит разрешение. В окне Apple нажми «Дальше»."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Далі Apple попросить дозвіл. У вікні Apple торкнись «Далі»."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "次にAppleが許可を求めます。Appleの確認画面で「続ける」をタップしてください。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다음으로 Apple이 권한을 요청해요. Apple 알림에서 계속을 탭하세요."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seterusnya, Apple meminta kebenaran. Ketik Teruskan pada amaran Apple."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apoi Apple cere permisiunea. Atinge Continuă în alerta de la Apple."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Potom Apple požiada o povolenie. Vo výzve od Apple ťukni na Pokračovať."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "จากนั้น Apple จะขอสิทธิ์ แตะ “ต่อไป” ในข้อความแจ้งของ Apple"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "接下来 Apple 会请求权限。在 Apple 的提示中点按“继续”。"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "इसके बाद Apple अनुमति माँगेगा। Apple के संदेश में जारी रखें पर टैप करें।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zatim Apple traži dopuštenje. U Appleovoj obavijesti dodirni Nastavi."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ezután az Apple engedélyt kér. Az Apple üzenetében koppints a Folytatás gombra."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ardından Apple izin ister. Apple’ın uyarısında Devam’a dokun."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "அடுத்து Apple அனுமதி கேட்கும். Apple காட்டும் அறிவிப்பில் தொடரவும் என்பதைத் தட்டுங்கள்."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Berikutnya, Apple meminta izin. Ketuk Lanjut di peringatan dari Apple."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بعدها تطلب Apple الإذن. اضغطي متابعة في تنبيهها."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tiếp theo, Apple sẽ xin quyền. Chạm vào Tiếp tục trong thông báo của Apple."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "এরপর Apple অনুমতি চাইবে। Apple-এর বার্তায় চালিয়ে যান-এ ট্যাপ করুন।"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اس کے بعد Apple اجازت مانگے گا۔ Apple کے پیغام میں جاری رکھیں پر ٹیپ کریں۔"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nato Apple prosi za dovoljenje. V Applovem opozorilu tapni Nadaljuj."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Μετά η Apple ζητά άδεια. Πάτα Συνέχεια στην ειδοποίησή της."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "తర్వాత Apple అనుమతి అడుగుతుంది. Apple సందేశంలో కొనసాగించండి నొక్కండి."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "接下來 Apple 會要求權限。在 Apple 的提示中點一下「繼續」。"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "હવે Apple મંજૂરી માગશે. Appleના સંદેશમાં ચાલુ રાખો પર ટૅપ કરો."
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಮುಂದೆ Apple ಅನುಮತಿ ಕೇಳುತ್ತದೆ. Apple ಸಂದೇಶದಲ್ಲಿ ಮುಂದುವರಿಸಿ ಟ್ಯಾಪ್ ಮಾಡಿ."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "അടുത്തതായി Apple അനുമതി ചോദിക്കും. Apple-ന്റെ സന്ദേശത്തിൽ തുടരൂ ടാപ്പ് ചെയ്യൂ."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "यानंतर Apple परवानगी मागेल. Apple च्या संदेशात सुरू ठेवा वर टॅप करा."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ଏହାପରେ Apple ଅନୁମତି ମାଗିବ। Apple ର ବାର୍ତ୍ତାରେ ଜାରି ରଖନ୍ତୁ ଟ୍ୟାପ୍ କରନ୍ତୁ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਅੱਗੇ Apple ਇਜਾਜ਼ਤ ਮੰਗੇਗਾ। Apple ਦੇ ਸੁਨੇਹੇ ਵਿੱਚ ਜਾਰੀ ਰੱਖੋ ’ਤੇ ਟੈਪ ਕਰੋ।"
+          }
+        }
+      }
+    },
     "settings.subscription.title": {
       "comment": "Subscription row [paywall]",
       "localizations": {

@@ -360,6 +360,17 @@ protocol AnalyticsTracking {
     isPlus: Bool?
   )
 
+  /// Blocker setup after onboarding: the blocked-apps editor's Screen Time
+  /// ask and its save, with the surface that opened the editor. Always
+  /// `source: settings`, the value these events have carried since #163.
+  func track(
+    _ event: AnalyticsEvent,
+    blockerSetupSurface: AnalyticsBlockerSetupSurface,
+    result: AnalyticsResult?,
+    hasBlockingSelection: Bool?,
+    isPlus: Bool?
+  )
+
   /// Report a handled failure as `app_error` + `$exception` (#179).
   func trackError(
     _ domain: AppErrorDomain,
@@ -610,6 +621,38 @@ extension AnalyticsTracking {
     )
   }
 
+  /// Recorders that predate the editor surface still see the `settings`
+  /// event they already handle, minus the surface.
+  func track(
+    _ event: AnalyticsEvent,
+    blockerSetupSurface: AnalyticsBlockerSetupSurface,
+    result: AnalyticsResult?,
+    hasBlockingSelection: Bool?,
+    isPlus: Bool?
+  ) {
+    track(
+      event,
+      source: .settings,
+      step: nil,
+      stepIndex: nil,
+      screen: nil,
+      plan: nil,
+      result: result,
+      setting: nil,
+      acquisitionSource: nil,
+      isPlus: isPlus,
+      hasBlockingSelection: hasBlockingSelection,
+      interventionCount: nil,
+      shakeCount: nil,
+      trialWarningDay: nil,
+      trialEndCohort: nil,
+      titleCustomized: nil,
+      bodyCustomized: nil,
+      retryTitleCustomized: nil,
+      retryBodyCustomized: nil,
+    )
+  }
+
   private func trackLegacy(
     _ event: AnalyticsEvent,
     source: AnalyticsSource? = nil,
@@ -694,6 +737,10 @@ enum AnalyticsEvent: String, CaseIterable {
   case plusSetupStripViewed = "plus_setup_strip_viewed"
   case plusSetupStripTapped = "plus_setup_strip_tapped"
   case plusSetupStep = "plus_setup_step"
+  /// Today's "set up app blocking" card was on screen; at most once per day.
+  case homeBlockingCardViewed = "home_blocking_card_viewed"
+  case homeBlockingCardTapped = "home_blocking_card_tapped"
+  case homeBlockingCardDismissed = "home_blocking_card_dismissed"
   case smartReminderRetryScheduled = "smart_reminder_retry_scheduled"
   case smartReminderRetryFired = "smart_reminder_retry_fired"
   case smartReminderOutcome = "smart_reminder_outcome"
@@ -735,6 +782,9 @@ enum AnalyticsEvent: String, CaseIterable {
   case notificationPermissionCompleted = "notification_permission_completed"
   case screenTimePermissionRequested = "screen_time_permission_requested"
   case screenTimePermissionCompleted = "screen_time_permission_completed"
+  /// The blocked-apps editor explained Screen Time before asking for it.
+  /// `screen_time_permission_requested` follows only once the user continues.
+  case screenTimeLeadInViewed = "screen_time_lead_in_viewed"
   case tabSelected = "tab_selected"
   case settingsSheetOpened = "settings_sheet_opened"
   case settingsChangeSaved = "settings_change_saved"
@@ -819,6 +869,15 @@ enum AnalyticsPaywallSurface: String, CaseIterable {
   case plusUpsell = "plus_upsell"
   /// The onboarding access-verification screen's Restore button (ENG-74).
   case onboardingVerification = "onboarding_verification"
+}
+
+/// What opened the blocked-apps editor after onboarding. Sent as `surface`,
+/// the key paywall events already use for their entry point.
+enum AnalyticsBlockerSetupSurface: String, CaseIterable {
+  case settings
+  case homeBlockingCard = "home_blocking_card"
+  case plusSetup = "plus_setup"
+  case updateTrial = "update_trial"
 }
 
 enum AnalyticsPlusSetupAction: String, CaseIterable {
@@ -997,6 +1056,7 @@ struct AnalyticsPayload {
   /// The immutable pre/post-cutover trial cohort for issue #257.
   let trialTermsCohort: TrialTermsCohort?
   let paywallSurface: AnalyticsPaywallSurface?
+  let blockerSetupSurface: AnalyticsBlockerSetupSurface?
   let authorizationState: AnalyticsAuthorizationState?
   let retryCount: Int?
   let smartReminderOutcome: AnalyticsSmartReminderOutcome?
@@ -1036,6 +1096,7 @@ struct AnalyticsPayload {
     trialEndCohort: TrialEndPaywallCohort? = nil,
     trialTermsCohort: TrialTermsCohort? = nil,
     paywallSurface: AnalyticsPaywallSurface? = nil,
+    blockerSetupSurface: AnalyticsBlockerSetupSurface? = nil,
     authorizationState: AnalyticsAuthorizationState? = nil,
     retryCount: Int? = nil,
     smartReminderOutcome: AnalyticsSmartReminderOutcome? = nil,
@@ -1074,6 +1135,7 @@ struct AnalyticsPayload {
     self.trialEndCohort = trialEndCohort
     self.trialTermsCohort = trialTermsCohort
     self.paywallSurface = paywallSurface
+    self.blockerSetupSurface = blockerSetupSurface
     self.authorizationState = authorizationState
     self.retryCount = retryCount
     self.smartReminderOutcome = smartReminderOutcome
@@ -1131,6 +1193,9 @@ struct AnalyticsPayload {
     }
     if let paywallSurface {
       properties["surface"] = .string(paywallSurface.rawValue)
+    }
+    if let blockerSetupSurface {
+      properties["surface"] = .string(blockerSetupSurface.rawValue)
     }
     if let authorizationState {
       properties["authorization_state"] = .string(authorizationState.rawValue)
@@ -1643,6 +1708,24 @@ final class AnalyticsManager: AnalyticsTracking {
     )
 
     capture(event, payload: payload)
+  }
+
+  func track(
+    _ event: AnalyticsEvent,
+    blockerSetupSurface: AnalyticsBlockerSetupSurface,
+    result: AnalyticsResult?,
+    hasBlockingSelection: Bool?,
+    isPlus: Bool?
+  ) {
+    let payload = AnalyticsPayload(
+      source: .settings,
+      result: result,
+      isPlus: isPlus,
+      hasBlockingSelection: hasBlockingSelection,
+      blockerSetupSurface: blockerSetupSurface
+    )
+
+    capture(event, payload: payload, source: .settings)
   }
 
   private func capture(

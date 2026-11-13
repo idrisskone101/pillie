@@ -432,10 +432,7 @@ struct ContentView: View {
 	              // The existing Settings blocker editor: completing setup here
 	              // runs under the freshly granted trial's Plus Access, so a valid
 	              // save activates blocking exactly like any Plus user's.
-	              BlockedAppsEditor()
-	                .presentationDetents([.height(430)])
-	                .presentationDragIndicator(.hidden)
-	                .presentationBackground(PillieTheme.bg)
+	              BlockedAppsEditor(surface: .updateTrial)
 	            }
 	          }
 	        }

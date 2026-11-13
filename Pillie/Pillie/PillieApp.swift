@@ -608,6 +608,13 @@ struct PillieApp: App {
                 rawValue: reason ?? ScreenTimeRefusal.heldByAnotherApp.rawValue
             )
             AppBlockingManager.shared.updateAuthorizationStatus()
+        case "/screen-time-unasked":
+            // QA control: simulator Screen Time is approved from first launch.
+            // This puts it back to "never asked" for this launch, so the
+            // blocked-apps editor opens on its lead-in. The next request
+            // resolves it: approved, or refused per `/screen-time-refused`.
+            AppBlockingManager.shared.debugSimulatorNeverAsked = true
+            AppBlockingManager.shared.updateAuthorizationStatus()
         case "/onboarding-personalization-intent":
             UserDefaults.standard.set(
                 OnboardingFlow.Step.painPoints.rawValue,

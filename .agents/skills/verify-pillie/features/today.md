@@ -25,7 +25,11 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   Shake to Confirm (or its tap-to-confirm fallback), which marks today taken
   — and the same button undoes it.
 - `today-blocking-card` shows `homeBlockingStatusCard` while app blocking
-  isn't set up yet; dismissible, and it does not come back once dismissed.
+  isn't set up yet. Its X hides it until a check-in next goes late or is
+  missed, when the setup card comes back once; a second X is final
+  (`BlockingCardDismissal`). The locked card a free account sees stays away
+  after one X. During the trial the card still waits for a finished Plus
+  setup sheet and trial day 3.
 - `today-protection-off` shows `homeProtectionOffCard` once Plus Access ends
   for a user who had saved blocker config — persistent, no dismissal.
 - `today-refill-banner` shows the refill/new-cycle card once the pack is
@@ -112,6 +116,10 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   live day later (`/fixed-now`) pill 21 is missed ("Pill 21 missed
   yesterday"), its tile `#packTile.21` opens the History day sheet, and
   marking it taken redraws the card.
+- `flows/today-blocking-card-return.flow` — on a Plus patch routine, the X
+  hides the blocking card, a late change one live day on (`/fixed-now`)
+  brings it back, and after a second X a missed change and a later late
+  removal leave it away.
 - `flows/today-late-explainer.flow` — the same late pill 21: the ⓘ
   `#homePackLateInfo` after the late line opens the 24-hour explainer
   `#doseWindowExplainer` ("Each pill gets 24 hours.", 8:00 AM today to
@@ -188,8 +196,11 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   `#shakeConfirmStage` once per shake to step the stages, or
   `#shakeTapToConfirmFallback` ("Tap to check in instead") to finish at once.
 - `homeBlockingStatusCardDismissed` is a persistent `@AppStorage` flag that
-  survives `launch`. Start a flow from `fresh` whenever it needs the
-  blocking card in its default (not dismissed) state.
+  survives `launch`, with `homeBlockingStatusCardDismissedAt` and
+  `homeBlockingStatusCardReturned` beside it. Start a flow from `fresh`
+  whenever it needs the blocking card in its default (not dismissed) state.
+  A Plus flow that taps the X and then moves the clock to a later day with
+  something late or missed gets the card back once.
 - The Review Prompt card is gated behind every higher-priority card
   (`ProtectionOffCard`, `BlockingStatusCard`, the refill banner) — dismiss
   those first or the review card never renders.
