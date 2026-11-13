@@ -22,6 +22,9 @@ struct BlockingRehearsalView: View {
     @State private var shakeDetector = ShakeDetectionManager(requiredShakes: 1)
     @State private var appeared = false
     @AppStorage(BlockingRehearsalView.demoSeenKey) private var demoSeen = false
+    #if DEBUG
+    @AppStorage(BlockingRehearsalDebugSeed.storageKey) private var debugSeedLink = ""
+    #endif
 
     let distractionChoices: Set<DistractionChoice>
     let onBack: () -> Void
@@ -36,12 +39,23 @@ struct BlockingRehearsalView: View {
     private var blockingManager: AppBlockingManager { .shared }
 
     private var script: BlockingRehearsalScript {
-        BlockingRehearsalScript(
+        let script = BlockingRehearsalScript(
             distractionChoices: distractionChoices,
             method: store.contraceptiveMethod,
             reminderHour: store.reminderHour,
             reminderMinute: store.reminderMinute
         )
+        #if DEBUG
+        if let featuredApp = BlockingRehearsalDebugSeed(link: debugSeedLink)?.featuredApp {
+            return BlockingRehearsalScript(
+                featuredApp: featuredApp,
+                method: script.method,
+                reminderHour: script.reminderHour,
+                reminderMinute: script.reminderMinute
+            )
+        }
+        #endif
+        return script
     }
 
     private var content: BlockingRehearsalContent {
@@ -110,13 +124,24 @@ struct BlockingRehearsalView: View {
         )
         .onAppear {
             appeared = true
-            send(.appeared(BlockingRehearsalOpening(
+            var opening = BlockingRehearsalOpening(
                 demoSeen: demoSeen,
                 hasSelection: blockingManager.selectionState.hasSelection,
                 isAuthorized: blockingManager.isAuthorized,
                 voiceOverRunning: voiceOverEnabled
-            )))
+            )
+            #if DEBUG
+            opening.debugSeed = BlockingRehearsalDebugSeed(link: debugSeedLink)
+            #endif
+            send(.appeared(opening))
         }
+        #if DEBUG
+        .onChange(of: debugSeedLink) { _, link in
+            if let seed = BlockingRehearsalDebugSeed(link: link) {
+                send(.debugSeeded(seed))
+            }
+        }
+        #endif
         .onDisappear {
             shakeDetector.stopDetecting()
         }

@@ -94,8 +94,16 @@ struct BlockingRehearsalState: Equatable {
     private var voiceOverRunning = false
     private var sceneActive = true
 
+    #if DEBUG
+    /// A debug-seeded beat holds still for screenshots unless `selfPlay=on`.
+    private var holdsBeats = false
+    #endif
+
     private var selfPlays: Bool {
-        !voiceOverRunning && sceneActive
+        #if DEBUG
+        if holdsBeats { return false }
+        #endif
+        return !voiceOverRunning && sceneActive
     }
 
     /// Total: every event is legal in every position. One that does not apply
@@ -107,6 +115,11 @@ struct BlockingRehearsalState: Equatable {
             hasSelection = opening.hasSelection
             isAuthorized = opening.isAuthorized
             voiceOverRunning = opening.voiceOverRunning
+            #if DEBUG
+            if let seed = opening.debugSeed {
+                return jump(to: seed)
+            }
+            #endif
             if opening.hasSelection {
                 return enter(.picks(requesting: false))
             }
@@ -188,8 +201,28 @@ struct BlockingRehearsalState: Equatable {
         case .sceneActivityChanged(let isActive):
             sceneActive = isActive
             return []
+
+        #if DEBUG
+        case .debugSeeded(let seed):
+            guard position != .unopened else { return [] }
+            return jump(to: seed)
+        #endif
         }
     }
+
+    #if DEBUG
+    private mutating func jump(to seed: BlockingRehearsalDebugSeed) -> [BlockingRehearsalEffect] {
+        holdsBeats = !seed.selfPlays
+        switch seed.stage {
+        case .reminder: return enter(.reminder(.waiting))
+        case .paused: return enter(.paused(.waiting))
+        case .shake: return enter(.shake(.waiting))
+        case .ask: return enter(.ask(requesting: false))
+        case .refused: return enter(.refused(seed.refusal, requesting: false))
+        case .picks: return enter(.picks(requesting: false))
+        }
+    }
+    #endif
 
     /// Where the journey rests once the beats are over or Apple said yes.
     private var restingPosition: Position {
@@ -300,6 +333,9 @@ struct BlockingRehearsalOpening: Equatable {
     var hasSelection: Bool
     var isAuthorized: Bool
     var voiceOverRunning: Bool
+    #if DEBUG
+    var debugSeed: BlockingRehearsalDebugSeed?
+    #endif
 }
 
 enum BlockingRehearsalEvent: Equatable {
@@ -323,6 +359,11 @@ enum BlockingRehearsalEvent: Equatable {
     case authorizationChanged(isAuthorized: Bool)
     case voiceOverChanged(isRunning: Bool)
     case sceneActivityChanged(isActive: Bool)
+
+    #if DEBUG
+    /// A debug link arrived while the screen was already up.
+    case debugSeeded(BlockingRehearsalDebugSeed)
+    #endif
 }
 
 /// One-shot work for the view to carry out, in order.
