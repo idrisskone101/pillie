@@ -195,16 +195,14 @@ final class InteractionFeedbackTests: XCTestCase {
 
         let choice = onboardingFeedback.selectChoice(accessibilityReduceMotion: false)
         let setupContinue = onboardingFeedback.continueSetupStep(accessibilityReduceMotion: false)
-        let demoContinue = onboardingFeedback.continueDemoMoment(accessibilityReduceMotion: false)
         let review = onboardingFeedback.requestOrSkipReview(accessibilityReduceMotion: true)
 
         XCTAssertEqual(
             feedbackRecorder.performedIntents,
-            [.choice, .meaningfulCommit, .lowRiskTap, .lowRiskTap]
+            [.choice, .meaningfulCommit, .lowRiskTap]
         )
         XCTAssertEqual(choice.motion, .commitSpring)
         XCTAssertEqual(setupContinue.motion, .commitSpring)
-        XCTAssertEqual(demoContinue.motion, .standard)
         XCTAssertEqual(review.motion, .standard)
         XCTAssertTrue(review.motionProfile.usesCalmerSpatialMotion)
     }

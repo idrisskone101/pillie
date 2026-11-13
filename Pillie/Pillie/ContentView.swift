@@ -93,46 +93,11 @@ struct ContentView: View {
             selectedFreePlan: onboardingSelectedFreePlan,
             needsTodayPick: needsTodayPick
           ) {
-	        case .welcome:
-	          WelcomeView {
-              continueDemoMoment(to: .productDemo)
-	          }
-          .transition(
-            .asymmetric(
-              insertion: .move(edge: .leading),
-              removal: .move(edge: .leading)
-            ))
-
-	        case .analyticsConsent:
-	          // Retired: the Analytics Consent screen was removed (analytics is
-	          // collected for everyone). The new shell owns steps 0–1, so this
-	          // legacy arm is unreachable and only exists to keep the switch exhaustive.
+	        case .welcome, .analyticsConsent, .productDemo, .plusBlockingDemo:
+	          // Retired. The intro shell owns raw steps 0 and 1, and `visibleStep`
+	          // resumes the two legacy demo steps on `.painPoints`, so these arms
+	          // only keep the switch exhaustive.
 	          Color.clear
-
-	        case .productDemo:
-	          ProductDemoMomentView(
-	            trialEndTerms: onboardingTrialEndTerms,
-	            onContinue: {
-                continueDemoMoment(to: .plusBlockingDemo)
-	            }
-          )
-          .transition(
-            .asymmetric(
-              insertion: .move(edge: .trailing),
-              removal: .move(edge: .trailing)
-            ))
-
-	        case .plusBlockingDemo:
-	          PlusBlockingDemoView(
-	            onContinue: {
-                continueDemoMoment(to: .analyticsConsent)
-	            }
-          )
-          .transition(
-            .asymmetric(
-              insertion: .move(edge: .trailing),
-              removal: .move(edge: .trailing)
-            ))
 
 	        case .reviewPrompt:
 	          // Retired step: `visibleStep` migrates it forward to `.painPoints`, so
@@ -628,13 +593,6 @@ struct ContentView: View {
 
     onboardingStep = visibleStep.rawValue
     UserDefaults.standard.set(visibleStep.rawValue, forKey: OnboardingFlow.stepStorageKey)
-  }
-
-  private func continueDemoMoment(to step: OnboardingFlow.Step) {
-    transition(
-      to: step,
-      response: onboardingFeedback.continueDemoMoment(
-        accessibilityReduceMotion: accessibilityReduceMotion))
   }
 
   @ViewBuilder
