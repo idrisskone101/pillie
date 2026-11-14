@@ -1498,46 +1498,6 @@
     {
       "issue": "ENG-73",
       "table": "Localizable",
-      "key": "onboarding.demo.title",
-      "en": "Your day with Pillie",
-      "de": "Dein Tag mit Pillie",
-      "it": "La tua giornata con Pillie"
-    },
-    {
-      "issue": "ENG-73",
-      "table": "Localizable",
-      "key": "onboarding.blocking_demo.title",
-      "en": "Apps pause until you check in.",
-      "de": "Deine Apps pausieren, bis du abhakst.",
-      "it": "Le app restano in pausa finché non confermi."
-    },
-    {
-      "issue": "ENG-73",
-      "table": "Localizable",
-      "key": "onboarding.blocking_demo.body",
-      "en": "Pillie Plus can pause the apps you choose when a reminder goes off. They open again once you check in.",
-      "de": "Pillie Plus kann die Apps pausieren, die du auswählst, sobald eine Erinnerung kommt. Wenn du abhakst, sind sie wieder offen.",
-      "it": "Con Pillie Plus le app che scegli vanno in pausa quando arriva il promemoria. Si riaprono appena confermi."
-    },
-    {
-      "issue": "ENG-73",
-      "table": "Localizable",
-      "key": "onboarding.blocking_demo.drag_title",
-      "en": "Drag this onto your apps.",
-      "de": "Ziehe das auf deine Apps.",
-      "it": "Trascina questo sulle tue app."
-    },
-    {
-      "issue": "ENG-73",
-      "table": "Localizable",
-      "key": "onboarding.demo.explainer",
-      "en": "Pillie reminds you, you check in, and your history fills in.",
-      "de": "Pillie erinnert dich, du hakst ab, und dein Verlauf füllt sich.",
-      "it": "Pillie te lo ricorda, tu confermi e la cronologia si riempie."
-    },
-    {
-      "issue": "ENG-73",
-      "table": "Localizable",
       "key": "accessibility.progress.personalize.title",
       "en": "Personalize your plan.",
       "de": "Mache deinen Plan persönlich.",
@@ -1722,54 +1682,6 @@
       "en": "Your free trial lasts 7 days. No card needed. After it ends, choose monthly, annual, or lifetime to keep Plus.",
       "de": "Deine kostenlose Testphase dauert 7 Tage. Keine Karte nötig. Danach wählst du einen Monats-, Jahres- oder Lifetime-Tarif, um Plus zu behalten.",
       "it": "La prova gratuita dura 7 giorni. Non serve la carta. Quando finisce, scegli mensile, annuale o a vita per tenere Plus."
-    },
-    {
-      "issue": "ENG-73",
-      "table": "Localizable",
-      "key": "onboarding.blocking_setup.skip",
-      "en": "Not now",
-      "de": "Nicht jetzt",
-      "it": "Non ora"
-    },
-    {
-      "issue": "ENG-73",
-      "table": "Localizable",
-      "key": "onboarding.blocking_setup.empty_detail",
-      "en": "Next, Apple asks for Screen Time so the apps can pause. Tap Continue.",
-      "de": "Als Nächstes fragt Apple nach Bildschirmzeit, damit die Apps pausieren können. Tippe auf Weiter.",
-      "it": "Poi Apple chiede Tempo di utilizzo così le app possono andare in pausa. Tocca Continua."
-    },
-    {
-      "issue": "ENG-73",
-      "table": "Localizable",
-      "key": "onboarding.blocking_setup.allow_pausing",
-      "en": "Allow pausing",
-      "de": "Pausieren erlauben",
-      "it": "Consenti la pausa"
-    },
-    {
-      "issue": "ENG-73",
-      "table": "Localizable",
-      "key": "onboarding.blocking_setup.paused_app",
-      "en": "This app is paused",
-      "de": "Diese App ist pausiert",
-      "it": "Questa app è in pausa"
-    },
-    {
-      "issue": "ENG-73",
-      "table": "Localizable",
-      "key": "onboarding.blocking_setup.unlock_hint",
-      "en": "Take your %@ pill to open this app again.",
-      "de": "Nimm deine Pille um %@, dann öffnet sich diese App wieder.",
-      "it": "Prendi la pillola delle %@ per riaprire questa app."
-    },
-    {
-      "issue": "ENG-73",
-      "table": "Localizable",
-      "key": "onboarding.blocking_setup.mark_taken",
-      "en": "I took my pill",
-      "de": "Ich habe meine Pille genommen",
-      "it": "Ho preso la pillola"
     },
     {
       "issue": "ENG-73",
@@ -4037,6 +3949,296 @@
       "en": "Get Pillie Plus · %@ once",
       "de": "Pillie Plus holen · %@ einmalig",
       "it": "Ottieni Pillie Plus · %@ una tantum"
+    },
+    {
+      "issue": "blocking-rehearsal",
+      "table": "Localizable",
+      "key": "onboarding.blocking_rehearsal.header",
+      "create": true,
+      "comment": "Blocking rehearsal: progress-header label during the three demo beats [standard]",
+      "en": "Try it",
+      "de": "Probier es aus",
+      "it": "Provalo"
+    },
+    {
+      "issue": "blocking-rehearsal",
+      "table": "Localizable",
+      "key": "onboarding.blocking_rehearsal.reminder.title",
+      "create": true,
+      "comment": "Blocking rehearsal beat 1 title; placeholder is her reminder time, e.g. 8:00 PM or 20:00 [standard]",
+      "en": "Your %@ reminder just rang.",
+      "de": "Deine Erinnerung um %@ hat gerade geklingelt.",
+      "it": "Il tuo promemoria delle %@ è appena suonato."
+    },
+    {
+      "issue": "blocking-rehearsal",
+      "table": "Localizable",
+      "key": "onboarding.blocking_rehearsal.reminder.body",
+      "create": true,
+      "comment": "Blocking rehearsal beat 1 body; placeholder is the featured app name, e.g. TikTok [standard]",
+      "en": "Try opening %@ anyway.",
+      "de": "Versuch trotzdem, %@ zu öffnen.",
+      "it": "Prova ad aprire %@ lo stesso."
+    },
+    {
+      "issue": "blocking-rehearsal",
+      "table": "Localizable",
+      "key": "onboarding.blocking_rehearsal.paused.title",
+      "create": true,
+      "comment": "Blocking rehearsal beat 2 title; placeholder is the featured app name [standard]",
+      "en": "%@ is paused.",
+      "de": "%@ ist pausiert.",
+      "it": "%@ è in pausa."
+    },
+    {
+      "issue": "blocking-rehearsal",
+      "table": "Localizable",
+      "key": "onboarding.blocking_rehearsal.paused.body",
+      "create": true,
+      "comment": "Blocking rehearsal beat 2 body under the paused title [standard]",
+      "en": "Everything else you pick pauses too. The rest of your phone works as usual.",
+      "de": "Alles andere, was du auswählst, auch. Der Rest deines Handys funktioniert wie gewohnt.",
+      "it": "Lo sarà anche ogni altra cosa che scegli. Il resto del telefono funziona come sempre."
+    },
+    {
+      "issue": "blocking-rehearsal",
+      "table": "Localizable",
+      "key": "onboarding.blocking_rehearsal.paused.open_pillie",
+      "create": true,
+      "comment": "Blocking rehearsal beat 2 pause-card button; same wording as shield.primary_action in Shield.xcstrings [standard]",
+      "en": "Open Pillie",
+      "de": "Pillie öffnen",
+      "it": "Apri Pillie"
+    },
+    {
+      "issue": "blocking-rehearsal",
+      "table": "Localizable",
+      "key": "onboarding.blocking_rehearsal.shake.eyebrow",
+      "create": true,
+      "comment": "Blocking rehearsal beat 3 eyebrow above Shake to check in; uppercased in SwiftUI [standard]",
+      "en": "This is a practice run.",
+      "de": "Das ist ein Probelauf.",
+      "it": "Questa è una prova."
+    },
+    {
+      "issue": "blocking-rehearsal",
+      "table": "Localizable",
+      "key": "onboarding.blocking_rehearsal.ask.header",
+      "create": true,
+      "comment": "Blocking rehearsal: progress-header label on the ask, picks and refused states [standard]",
+      "en": "Set it up",
+      "de": "Richte es ein",
+      "it": "Configuralo"
+    },
+    {
+      "issue": "blocking-rehearsal",
+      "table": "Localizable",
+      "key": "onboarding.blocking_rehearsal.ask.title",
+      "create": true,
+      "comment": "Blocking rehearsal ask title after the demo check-in; placeholder is the featured app name; breaks after the first sentence [standard]",
+      "en": "Checked in. %@ is open.",
+      "de": "Abgehakt. %@ ist offen.",
+      "it": "Confermato. Ora puoi aprire %@."
+    },
+    {
+      "issue": "blocking-rehearsal",
+      "table": "Localizable",
+      "key": "onboarding.blocking_rehearsal.ask.body",
+      "create": true,
+      "comment": "Blocking rehearsal ask body [standard]",
+      "en": "Every reminder works like this. Choose what should wait for you.",
+      "de": "So läuft jede Erinnerung. Wähle, was auf dich warten soll.",
+      "it": "Ogni promemoria funziona così. Scegli cosa deve aspettarti."
+    },
+    {
+      "issue": "blocking-rehearsal",
+      "table": "Localizable",
+      "key": "onboarding.blocking_rehearsal.ask.checked_in",
+      "create": true,
+      "comment": "Blocking rehearsal ask result pill; placeholder is a clock time, one minute after the reminder time [standard]",
+      "en": "Checked in at %@",
+      "de": "Um %@ abgehakt",
+      "it": "Confermato alle %@"
+    },
+    {
+      "issue": "blocking-rehearsal",
+      "table": "Localizable",
+      "key": "onboarding.blocking_rehearsal.ask.cta",
+      "create": true,
+      "comment": "Blocking rehearsal ask primary button; runs Screen Time authorization, then the app picker [standard]",
+      "en": "Choose what to pause",
+      "de": "Wähle, was pausieren soll",
+      "it": "Scegli cosa mettere in pausa"
+    },
+    {
+      "issue": "blocking-rehearsal",
+      "table": "Localizable",
+      "key": "onboarding.blocking_rehearsal.ask.apple_line",
+      "create": true,
+      "comment": "Blocking rehearsal ask footer line above the primary button; Continue is the button on Apple’s alert [standard]",
+      "en": "Apple asks for Screen Time access first. Tap Continue.",
+      "de": "Zuerst fragt Apple nach dem Zugriff auf Bildschirmzeit. Tippe auf Weiter.",
+      "it": "Prima Apple chiede l’accesso a Tempo di utilizzo. Tocca Continua."
+    },
+    {
+      "issue": "blocking-rehearsal",
+      "table": "Localizable",
+      "key": "onboarding.blocking_rehearsal.picks.title",
+      "create": true,
+      "comment": "Blocking rehearsal title once apps are picked [standard]",
+      "en": "They’ll wait for you.",
+      "de": "Sie warten auf dich.",
+      "it": "Ti aspetteranno."
+    },
+    {
+      "issue": "blocking-rehearsal",
+      "table": "Localizable",
+      "key": "onboarding.blocking_rehearsal.picks.body",
+      "create": true,
+      "comment": "Blocking rehearsal body once apps are picked; Settings is Pillie’s Settings tab [standard]",
+      "en": "You can change them anytime in Settings.",
+      "de": "Du kannst sie jederzeit in den Einstellungen ändern.",
+      "it": "Puoi cambiarle quando vuoi nelle Impostazioni."
+    },
+    {
+      "issue": "blocking-rehearsal",
+      "table": "Localizable",
+      "key": "onboarding.blocking_rehearsal.picks.header",
+      "create": true,
+      "comment": "Blocking rehearsal picks card header [standard]",
+      "en": "Your picks",
+      "de": "Deine Auswahl",
+      "it": "Le tue scelte"
+    },
+    {
+      "issue": "blocking-rehearsal",
+      "table": "Localizable",
+      "key": "onboarding.blocking_rehearsal.picks.change",
+      "create": true,
+      "comment": "Blocking rehearsal picks card control that reopens the app picker [standard]",
+      "en": "Change",
+      "de": "Ändern",
+      "it": "Cambia"
+    },
+    {
+      "issue": "blocking-rehearsal",
+      "table": "Localizable",
+      "key": "onboarding.blocking_rehearsal.picks.category_caption",
+      "create": true,
+      "comment": "Blocking rehearsal caption under a picked category tile [standard]",
+      "en": "All apps",
+      "de": "Alle Apps",
+      "it": "Tutte le app"
+    },
+    {
+      "issue": "blocking-rehearsal",
+      "table": "Localizable",
+      "key": "onboarding.blocking_rehearsal.picks.pause_body",
+      "create": true,
+      "comment": "Blocking rehearsal picks card, first rhythm row body under the reminder time [standard]",
+      "en": "Your reminder rings and these pause.",
+      "de": "Deine Erinnerung klingelt, und diese hier pausieren.",
+      "it": "Il promemoria suona e queste vanno in pausa."
+    },
+    {
+      "issue": "blocking-rehearsal",
+      "table": "Localizable",
+      "key": "onboarding.blocking_rehearsal.picks.resume_title",
+      "create": true,
+      "comment": "Blocking rehearsal picks card, second rhythm row title [standard]",
+      "en": "When you check in",
+      "de": "Wenn du abhakst",
+      "it": "Quando confermi"
+    },
+    {
+      "issue": "blocking-rehearsal",
+      "table": "Localizable",
+      "key": "onboarding.blocking_rehearsal.picks.resume_body",
+      "create": true,
+      "comment": "Blocking rehearsal picks card, second rhythm row body [standard]",
+      "en": "They open again straight away.",
+      "de": "Sie sind sofort wieder offen.",
+      "it": "Si riaprono subito."
+    },
+    {
+      "issue": "blocking-rehearsal",
+      "table": "Localizable",
+      "key": "onboarding.blocking_rehearsal.refused.title",
+      "create": true,
+      "comment": "Blocking rehearsal title after Screen Time was not allowed [standard]",
+      "en": "Pausing apps needs Screen Time.",
+      "de": "Zum Pausieren von Apps braucht es Bildschirmzeit.",
+      "it": "Mettere in pausa le app richiede Tempo di utilizzo."
+    },
+    {
+      "issue": "blocking-rehearsal",
+      "table": "Localizable",
+      "key": "onboarding.blocking_rehearsal.refused.body",
+      "create": true,
+      "comment": "Blocking rehearsal body after Screen Time was not allowed; “it” is Screen Time [standard]",
+      "en": "Pillie only uses it to pause what you pick. Apple will ask again.",
+      "de": "Pillie nutzt sie nur, um zu pausieren, was du auswählst. Apple fragt noch einmal.",
+      "it": "Pillie lo usa solo per mettere in pausa ciò che scegli. Apple lo chiederà di nuovo."
+    },
+    {
+      "issue": "blocking-rehearsal",
+      "table": "Localizable",
+      "key": "onboarding.blocking_rehearsal.refused.caption",
+      "create": true,
+      "comment": "Blocking rehearsal caption under the drawing of Apple’s alert; Continue is the button on Apple’s alert [standard]",
+      "en": "On Apple’s prompt, tap Continue.",
+      "de": "Tippe in Apples Hinweis auf Weiter.",
+      "it": "Nella richiesta di Apple, tocca Continua."
+    },
+    {
+      "issue": "blocking-rehearsal",
+      "table": "Localizable",
+      "key": "onboarding.blocking_rehearsal.refused.reminders_only",
+      "create": true,
+      "comment": "Blocking rehearsal quiet button that skips app blocking setup [standard]",
+      "en": "Use reminders only",
+      "de": "Nur Erinnerungen nutzen",
+      "it": "Usa solo i promemoria"
+    },
+    {
+      "issue": "blocking-rehearsal",
+      "table": "Localizable",
+      "key": "onboarding.blocking_rehearsal.home.photos",
+      "create": true,
+      "comment": "Blocking rehearsal: Photos app label on the mini Home Screen, Apple's own app name [standard]",
+      "en": "Photos",
+      "de": "Fotos",
+      "it": "Foto"
+    },
+    {
+      "issue": "blocking-rehearsal",
+      "table": "Localizable",
+      "key": "onboarding.blocking_rehearsal.home.camera",
+      "create": true,
+      "comment": "Blocking rehearsal: Camera app label on the mini Home Screen, Apple's own app name [standard]",
+      "en": "Camera",
+      "de": "Kamera",
+      "it": "Fotocamera"
+    },
+    {
+      "issue": "blocking-rehearsal",
+      "table": "Localizable",
+      "key": "onboarding.blocking_rehearsal.home.maps",
+      "create": true,
+      "comment": "Blocking rehearsal: Maps app label on the mini Home Screen, Apple's own app name [standard]",
+      "en": "Maps",
+      "de": "Karten",
+      "it": "Mappe"
+    },
+    {
+      "issue": "blocking-rehearsal",
+      "table": "Localizable",
+      "key": "onboarding.blocking_rehearsal.home.notes",
+      "create": true,
+      "comment": "Blocking rehearsal: Notes app label on the mini Home Screen, Apple's own app name [standard]",
+      "en": "Notes",
+      "de": "Notizen",
+      "it": "Note"
     }
   ]
 }

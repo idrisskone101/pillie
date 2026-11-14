@@ -9,8 +9,8 @@ In a flow: `openurl pillie://debug/<path>?lang=en`. The runner accepts the iOS "
 | Path | Lands on |
 | --- | --- |
 | `/plus-home` | Home, onboarding complete, Plus on. The default starting point. |
-| `/plus-app-blocking-setup?terms=hard&expired=0\|1&selected=N` | Onboarding app-blocking step, optional hard-paywall-expired state and a fake app count |
-| `/plus-app-blocking-recovery` | The FamilyControls denied/cancelled recovery UI |
+| `/plus-app-blocking-setup?stage=reminder\|paused\|shake\|ask\|refused\|picks&selected=N&reason=cancelled\|conflict&featured=tiktok\|instagram\|youtube\|messages&selfPlay=on&access=notAsked&terms=hard&expired=0\|1` | The onboarding app-blocking step on any stage of the rehearsal. No `stage` opens the ask. `selected=N` opens the picks with N sample tiles. `stage=refused` also makes "Try again" fail the same way (clear it with `/screen-time-refused?reason=none`). A seeded beat holds still unless `selfPlay=on`. `access=notAsked` draws the stage as before Apple's Screen Time prompt, which the always-allowed simulator cannot otherwise show. `terms=hard` drops the entitlement so the trial line shows, and with `expired=1` it shows the locked screen. |
+| `?stage=…` | Any debug link that lands on the app-blocking step: open the rehearsal on that stage, as above. |
 | `/screen-time-refused?reason=conflict\|cancelled\|none` | Screen Time authorization fails for this launch the way a real iPhone refuses it: `conflict` (default) is another app holding access, `cancelled` is any other refusal, `none` lets the next request succeed |
 | `/screen-time-unasked` | Screen Time reads as never asked until the next request, so the blocked-apps editor opens on its lead-in. The request then approves, or refuses per `/screen-time-refused` |
 | `/onboarding-personalization-intent` | Onboarding pain-points step |

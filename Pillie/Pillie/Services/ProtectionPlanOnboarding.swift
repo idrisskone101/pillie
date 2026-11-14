@@ -73,8 +73,9 @@ struct ProtectionPlanTimingSelection: Equatable {
 /// The locked high-level order from ADR `0003-protection-plan-onboarding`.
 ///
 /// Raw values are stable and persisted, so new cases must only ever be appended.
-/// `analyticsConsent` is retired and never rendered — it is retained only so
-/// persisted step values migrate forward (see `ProtectionPlanOnboardingStore`).
+/// `analyticsConsent` and `earlyValueProof` are retired and never rendered. They
+/// stay so a persisted value can be read and migrated forward (see
+/// `ProtectionPlanOnboardingStore`).
 enum ProtectionPlanStep: Int, CaseIterable {
     case welcome = 0
     case analyticsConsent = 1
@@ -98,15 +99,13 @@ enum ProtectionPlanStep: Int, CaseIterable {
     /// The next step in the locked order, or `nil` once the flow runs past the
     /// final modeled step.
     var next: ProtectionPlanStep? {
-        // Analytics Consent was retired — Welcome leads straight to the Early Value
-        // Proof (analytics is collected for everyone, with no consent screen).
-        if self == .welcome { return .earlyValueProof }
+        if self == .welcome { return .reviewPrompt }
         return ProtectionPlanStep(rawValue: rawValue + 1)
     }
 
     /// The previous step in the locked order, or `nil` at the first step.
     var previous: ProtectionPlanStep? {
-        if self == .earlyValueProof { return .welcome }   // Analytics Consent retired.
+        if self == .reviewPrompt { return .welcome }
         return ProtectionPlanStep(rawValue: rawValue - 1)
     }
 }
@@ -146,10 +145,10 @@ struct ProtectionPlanOnboardingState: Equatable {
         currentStep.previous != nil
     }
 
-    /// Whether the screens the new shell owns — Welcome and the Early Value Proof —
-    /// have all been completed, signalling the handoff into the rest of onboarding.
-    /// The `reviewPrompt` step is retained only as that handoff sentinel; the review
-    /// request screen itself was removed.
+    /// Whether Welcome, the one screen the shell owns, has been completed,
+    /// signalling the handoff into the rest of onboarding. The `reviewPrompt` step
+    /// is retained only as that handoff sentinel; the review request screen itself
+    /// was removed.
     var hasFinishedIntro: Bool {
         currentStep.rawValue > ProtectionPlanStep.earlyValueProof.rawValue
     }
@@ -203,9 +202,12 @@ enum ProtectionPlanOnboardingStore {
     static func load(from defaults: UserDefaults) -> ProtectionPlanOnboardingState {
         let loadedStep = (defaults.object(forKey: Keys.step) as? Int)
             .flatMap(ProtectionPlanStep.init(rawValue:)) ?? .first
-        // Analytics Consent was retired; migrate anyone persisted on it forward to
-        // the Early Value Proof so they never land on the removed screen.
-        let step = loadedStep == .analyticsConsent ? .earlyValueProof : loadedStep
+        // She tapped past Welcome on an older build, so a retired intro screen
+        // resumes on the handoff and the first question, not back on Welcome.
+        let step: ProtectionPlanStep = switch loadedStep {
+        case .analyticsConsent, .earlyValueProof: .reviewPrompt
+        default: loadedStep
+        }
         let distractionChoices = Set(
             (defaults.stringArray(forKey: Keys.distractionChoices) ?? [])
                 .compactMap(DistractionChoice.init(rawValue:))

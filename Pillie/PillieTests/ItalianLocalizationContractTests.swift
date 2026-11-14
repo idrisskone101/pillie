@@ -107,13 +107,9 @@ final class ItalianLocalizationContractTests: XCTestCase {
             PillieLocalization.string("onboarding.welcome.demo.apps_open", locale: italian),
             "Ti viene voglia di aprirle…"
         )
-        XCTAssertEqual(
-            PillieLocalization.string("onboarding.blocking_demo.demo_label", locale: italian),
-            "Demo"
-        )
     }
 
-    func testEarlyValueProofChromeAndHighRiskActionsUseCompactItalianCopy() {
+    func testHighRiskActionsUseCompactItalianCopy() {
         let italian = Locale(identifier: "it_IT")
 
         XCTAssertEqual(
@@ -121,36 +117,8 @@ final class ItalianLocalizationContractTests: XCTestCase {
             "Continua alle notifiche"
         )
         XCTAssertEqual(
-            PillieLocalization.string("onboarding.blocking_demo.shake_title", locale: italian),
-            "Prova a scuotere per confermare"
-        )
-        XCTAssertEqual(
-            PillieLocalization.string("onboarding.blocking_demo.drag_title", locale: italian),
-            "Trascina questo sulle tue app."
-        )
-        XCTAssertEqual(
-            PillieLocalization.string("onboarding.blocking_demo.shake_body", locale: italian),
-            "Scuoti ora il telefono oppure tocca questa scheda."
-        )
-        XCTAssertEqual(
             PillieLocalization.string("today.action.shake", locale: italian),
             "Scuoti per confermare"
-        )
-        XCTAssertEqual(
-            PillieLocalization.string("onboarding.blocking_demo.apps_label", locale: italian),
-            "Le tue app"
-        )
-        XCTAssertEqual(
-            PillieLocalization.string("onboarding.blocking_demo.locked_label", locale: italian),
-            "In pausa"
-        )
-        XCTAssertEqual(
-            PillieLocalization.formatted(
-                "onboarding.blocking_demo.shake_progress",
-                locale: italian,
-                arguments: Int64(2), Int64(3)
-            ),
-            "2 di 3 scosse"
         )
     }
 
@@ -256,35 +224,35 @@ final class ItalianLocalizationContractTests: XCTestCase {
         )
     }
 
-    func testAppBlockingSetupUsesScreenTimeAndTrialAwareItalianCopy() {
-        let content = AppBlockingSetupContent.localized(
-            locale: Locale(identifier: "it_IT")
+    func testBlockingRehearsalUsesScreenTimeAwareItalianCopy() {
+        let italian = Locale(identifier: "it_IT")
+        let content = BlockingRehearsalContent.localized(
+            script: BlockingRehearsalScript(featuredApp: .tiktok, method: .pill, reminderHour: 20, reminderMinute: 0),
+            locale: italian
         )
 
-        XCTAssertEqual(content.titleLead, "Scegli le app da mettere in pausa")
-        XCTAssertEqual(content.chooseAppsCTA, "Consenti la pausa")
+        XCTAssertEqual(content.pausedTitle, "TikTok è in pausa.")
+        XCTAssertEqual(content.askTitle, "Confermato.\nOra puoi aprire TikTok.")
+        XCTAssertEqual(content.chooseCTA, "Scegli cosa mettere in pausa")
         XCTAssertEqual(
-            content.emptyDetail,
-            "Poi Apple chiede Tempo di utilizzo così le app possono andare in pausa. Tocca Continua."
+            content.appleLine,
+            "Prima Apple chiede l’accesso a Tempo di utilizzo. Tocca Continua."
         )
+        XCTAssertEqual(content.picksTitle, "Ti aspetteranno.")
+        XCTAssertEqual(content.refusedTitle, "Mettere in pausa le app richiede Tempo di utilizzo.")
         XCTAssertEqual(
-            content.authorizationDeniedTitle,
-            "Il blocco app richiede Tempo di utilizzo"
-        )
-        XCTAssertEqual(
-            content.authorizationDeniedDetail,
-            "Consenti l’accesso a Tempo di utilizzo così Pillie può mettere in pausa le app che scegli."
-        )
-        XCTAssertEqual(
-            content.authorizationConflictDetail,
+            content.conflictBody,
             "Un’altra app su questo iPhone sta usando Tempo di utilizzo. Disattivalo in quell’app, poi riprova."
         )
-        XCTAssertEqual(content.selectedSummaryLabel, "App selezionate")
         XCTAssertEqual(
-            content.selectedPrivacyNote,
+            content.privacyLine,
             "Pillie vede solo quante ne hai scelte. Le app restano private su questo dispositivo."
         )
-        XCTAssertEqual(content.skipCTA, "Non ora")
+        XCTAssertEqual(content.remindersOnly, "Usa solo i promemoria")
+        XCTAssertEqual(
+            BlockingSetupLockedContent.localized(locale: italian).title,
+            "Scegli le app da mettere in pausa"
+        )
     }
 
     func testMethodAwareNotificationsAndCategoryActionsResolveInItalian() {
@@ -367,7 +335,6 @@ final class ItalianLocalizationContractTests: XCTestCase {
 
         for locale in locales {
             let copy = ProtectionPlanWelcomeContent.localized(locale: locale).visibleCopy
-                + ProtectionPlanEarlyValueProofContent.localized(locale: locale).visibleCopy
                 + [
                     PillieLocalization.string("notification.followup.body", locale: locale),
                     PillieLocalization.string("shield.blocking_reason", locale: locale),

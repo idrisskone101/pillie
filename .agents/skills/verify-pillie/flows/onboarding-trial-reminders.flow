@@ -24,9 +24,6 @@ wait id protectionPlanPrimaryCTA
 shot welcome
 tap --id protectionPlanPrimaryCTA
 
-wait id protectionPlanEarlyValueProofView
-tap --label "Not now" --element-type Button
-
 wait text "What’s in the way?"
 tap --label TikTok
 tap --label "A simpler routine"
@@ -60,7 +57,7 @@ tap --label Allow  # iOS notification permission alert
 wait id protectionPlanPrimaryCTA 15
 tap --id protectionPlanPrimaryCTA
 
-wait id appBlockingEmptyStateCard 15
+wait id blockingRehearsalBanner 15
 shot app-blocking-before-apps
 sleep 2  # let the 0.25 s reschedule debounce and the center writes finish
 openurl "pillie://debug/dump-pending-notifications"

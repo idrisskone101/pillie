@@ -1,0 +1,97 @@
+# Every stage of the blocking rehearsal (BlockingRehearsalView) and the locked
+# screen (BlockingSetupLockedView), each opened by the one debug link
+# pillie://debug/plus-app-blocking-setup. A seeded beat holds still, so each
+# shot is the same every run. The simulator cannot pick apps or refuse Screen
+# Time, so the picks and the refusal are QA stand-ins: see
+# features/onboarding.md Gotchas.
+launch
+
+# A1, the reminder lands. The banner drops in at 0.6 s and the hand shows after
+# 2 s of waiting. terms=hard drops the entitlement and starts a fresh reverse
+# trial, the state a new user is in here. No footer on a beat.
+openurl "pillie://debug/plus-app-blocking-setup?stage=reminder&terms=hard&lang=en"
+wait id blockingRehearsalBanner 15
+expect id blockingRehearsalFeaturedApp
+expect-not id appBlockingTrialLine
+expect-not id blockingRehearsalPrimary
+sleep 2
+shot a1-reminder
+
+# A2, the app she tapped is paused.
+openurl "pillie://debug/plus-app-blocking-setup?stage=paused&terms=hard&lang=en"
+wait id blockingRehearsalOpenPillie 15
+expect id blockingRehearsalPauseCard
+expect-not id blockingRehearsalBanner
+sleep 1
+shot a2-paused
+
+# A3, shake to check in, on the coral cover with its back button.
+openurl "pillie://debug/plus-app-blocking-setup?stage=shake&terms=hard&lang=en"
+wait id blockingRehearsalTapInstead 15
+expect id blockingRehearsalShakeBeat
+expect label Back
+sleep 1
+shot a3-shake
+
+# A4, the ask, as a first-time user sees it. The simulator always reports Screen
+# Time as allowed, so access=notAsked draws it as before Apple's prompt: the
+# Apple line, one button, no way to skip. The trial line shows because the
+# trial is what unlocks setup.
+openurl "pillie://debug/plus-app-blocking-setup?stage=ask&access=notAsked&terms=hard&lang=en"
+wait id blockingRehearsalCheckedInPill 15
+expect id appBlockingTrialLine
+expect id blockingRehearsalPrimary
+expect text "Apple asks for Screen Time access first"
+expect-not id blockingRehearsalRemindersOnly
+sleep 1
+shot a4-ask
+
+# The ask once Screen Time is allowed and nothing is picked: Apple will not ask
+# again, so the Apple line goes and "Use reminders only" is the way out.
+openurl "pillie://debug/plus-app-blocking-setup?stage=ask&terms=hard&lang=en"
+wait id blockingRehearsalRemindersOnly 15
+expect id blockingRehearsalCheckedInPill
+expect-not text "Apple asks for Screen Time access first"
+shot a4-ask-allowed
+
+# A6, her picks, as sample tiles: one row, two rows, and more than eight.
+openurl "pillie://debug/plus-app-blocking-setup?selected=4&terms=hard&lang=en"
+wait id blockingRehearsalChangePicks 15
+expect id appBlockingTrialLine
+expect text "All apps"
+sleep 1
+shot a6-picks-4
+openurl "pillie://debug/plus-app-blocking-setup?selected=8&terms=hard&lang=en"
+wait text "news.example.com" 15
+shot a6-picks-8
+openurl "pillie://debug/plus-app-blocking-setup?selected=20&terms=hard&lang=en"
+wait text "+13" 15
+shot a6-picks-20
+
+# A7, after Apple's "Don't Allow": the drawn alert, Try again, Use reminders only.
+openurl "pillie://debug/plus-app-blocking-setup?stage=refused&reason=cancelled&terms=hard&lang=en"
+wait id blockingRehearsalPromptPreview 15
+expect id blockingRehearsalRemindersOnly
+expect id appBlockingTrialLine
+sleep 1
+shot a7-refused-cancelled
+
+# A7 when another app holds Screen Time: the conflict sentence and no drawing.
+openurl "pillie://debug/plus-app-blocking-setup?stage=refused&reason=conflict&terms=hard&lang=en"
+wait text "Another app on this iPhone is using Screen Time" 15
+gone id blockingRehearsalPromptPreview
+expect id blockingRehearsalRemindersOnly
+shot a7-refused-conflict
+openurl "pillie://debug/screen-time-refused?reason=none&lang=en"
+
+# A paid entitlement unlocks setup without a trial, so the trial line stays off.
+openurl "pillie://debug/plus-app-blocking-setup?stage=ask&access=notAsked&lang=en"
+wait id blockingRehearsalCheckedInPill 15
+expect-not id appBlockingTrialLine
+shot a4-ask-subscriber
+
+# The locked screen: the hard-paywall trial ran out, so there is no rehearsal.
+openurl "pillie://debug/plus-app-blocking-setup?terms=hard&expired=1&lang=en"
+wait id blockingSetupLockedCard 15
+expect-not id blockingRehearsalPrimary
+shot locked

@@ -53,15 +53,6 @@ struct OnboardingInteractionFeedback {
     }
 
     @discardableResult
-    func continueDemoMoment(accessibilityReduceMotion: Bool) -> Response {
-        response(
-            feedbackIntent: .lowRiskTap,
-            motion: .standard,
-            accessibilityReduceMotion: accessibilityReduceMotion
-        )
-    }
-
-    @discardableResult
     func requestOrSkipReview(accessibilityReduceMotion: Bool) -> Response {
         response(
             feedbackIntent: .lowRiskTap,

@@ -203,6 +203,18 @@ final class OnboardingFlowTests: XCTestCase {
         )
     }
 
+    func testPersistedLegacyDemoStepsResumeOnTheFirstQuestion() {
+        XCTAssertEqual(
+            OnboardingFlow.visibleStep(for: 2, isPlus: false, selectedFreePlan: false),
+            .painPoints
+        )
+        XCTAssertEqual(
+            OnboardingFlow.visibleStep(for: 3, isPlus: true, selectedFreePlan: false),
+            .painPoints
+        )
+        XCTAssertEqual(OnboardingFlow.displayIndex(for: OnboardingFlow.Step.painPoints.rawValue), 4)
+    }
+
     // MARK: - Calibration steps inserted by issue #76 (Risk Window + Draft Apps)
 
     func testRiskWindowAndDraftBlockedAppsAreAppendedSoExistingRawValuesAreStable() {

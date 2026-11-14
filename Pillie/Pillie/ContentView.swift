@@ -79,7 +79,6 @@ struct ContentView: View {
       // Main content
       ZStack {
         if onboardingStep < OnboardingFlow.Step.productDemo.rawValue {
-          // New Protection Plan Onboarding intro (Welcome -> Analytics Consent).
           ProtectionPlanOnboardingShell(
             model: protectionPlanModel,
             splashActive: isLoading,
@@ -93,46 +92,11 @@ struct ContentView: View {
             selectedFreePlan: onboardingSelectedFreePlan,
             needsTodayPick: needsTodayPick
           ) {
-	        case .welcome:
-	          WelcomeView {
-              continueDemoMoment(to: .productDemo)
-	          }
-          .transition(
-            .asymmetric(
-              insertion: .move(edge: .leading),
-              removal: .move(edge: .leading)
-            ))
-
-	        case .analyticsConsent:
-	          // Retired: the Analytics Consent screen was removed (analytics is
-	          // collected for everyone). The new shell owns steps 0–1, so this
-	          // legacy arm is unreachable and only exists to keep the switch exhaustive.
+	        case .welcome, .analyticsConsent, .productDemo, .plusBlockingDemo:
+	          // Retired. The intro shell owns raw steps 0 and 1, and `visibleStep`
+	          // resumes the two legacy demo steps on `.painPoints`, so these arms
+	          // only keep the switch exhaustive.
 	          Color.clear
-
-	        case .productDemo:
-	          ProductDemoMomentView(
-	            trialEndTerms: onboardingTrialEndTerms,
-	            onContinue: {
-                continueDemoMoment(to: .plusBlockingDemo)
-	            }
-          )
-          .transition(
-            .asymmetric(
-              insertion: .move(edge: .trailing),
-              removal: .move(edge: .trailing)
-            ))
-
-	        case .plusBlockingDemo:
-	          PlusBlockingDemoView(
-	            onContinue: {
-                continueDemoMoment(to: .analyticsConsent)
-	            }
-          )
-          .transition(
-            .asymmetric(
-              insertion: .move(edge: .trailing),
-              removal: .move(edge: .trailing)
-            ))
 
 	        case .reviewPrompt:
 	          // Retired step: `visibleStep` migrates it forward to `.painPoints`, so
@@ -144,7 +108,7 @@ struct ContentView: View {
 	            model: protectionPlanModel,
 	            progress: ProtectionPlanProgressIndex.progress(for: .painPoints),
 	            onBack: {
-                backFromQuestionsToProof()
+                backFromQuestionsToWelcome()
 	            },
 	            onContinue: {
 	              // Distraction Choices are committed inside ProtectionPlanDistractionChoicesView.
@@ -545,10 +509,6 @@ struct ContentView: View {
     showUpdateTrialAnnouncement = true
   }
 
-  /// Hands off from the new Protection Plan intro into the existing onboarding
-  /// flow. Lands at `painPoints` (the first question) so the legacy welcome,
-  /// product demos, and legacy analytics-consent step are skipped (consent is never
-  /// asked twice) and the retired review request is bypassed entirely.
   private func handoffFromProtectionPlanIntro() {
     guard onboardingStep < OnboardingFlow.Step.painPoints.rawValue else { return }
     withAnimation(.easeInOut(duration: 0.3)) {
@@ -630,16 +590,18 @@ struct ContentView: View {
     UserDefaults.standard.set(visibleStep.rawValue, forKey: OnboardingFlow.stepStorageKey)
   }
 
-  private func continueDemoMoment(to step: OnboardingFlow.Step) {
-    transition(
-      to: step,
-      response: onboardingFeedback.continueDemoMoment(
-        accessibilityReduceMotion: accessibilityReduceMotion))
+  private var blockingSetupAccess: BlockingSetupAccess {
+    BlockingSetupAccess.resolve(
+      activation: onboardingTrialActivationRoute,
+      hasPlusAccess: subscriptionManager.hasPlusAccess,
+      trialGranted: subscriptionManager.trialGrantDate != nil,
+      selectedFreePlan: onboardingSelectedFreePlan
+    )
   }
 
   @ViewBuilder
   private var appBlockingStep: some View {
-    if onboardingTrialActivationRoute == .verifyingAccess {
+    if blockingSetupAccess == .verifying {
       CommerceAccessVerificationView(
         isWorking: isResolvingOnboardingAccess,
         didFail: onboardingAccessResolutionFailed,
@@ -650,41 +612,23 @@ struct ContentView: View {
         await resolveOnboardingAccess()
       }
     } else {
-      AppBlockingSetupView(
-        trialEndTerms: onboardingTrialEndTerms,
-        onBack: {
-          if let previousStep = OnboardingFlow.previousStep(before: .appBlocking) {
-            lowRiskTransition(to: previousStep)
-          }
-        },
-        onContinue: {
-          guard !onboardingCommerceResolution.isResolving else { return }
-          if ProtectionPlanCompletion.landsOnProtectionPlanReady(for: currentCompletionState) {
-            onboardingTelemetry.blockerSetupCompleted()
-            continueSetupStep(to: .protectionPlanReady)
-          } else {
-            onboardingTelemetry.blockerSetupSkipped(
-              authorizationState: blockerAuthorizationAnalyticsState
-            )
-            routeOnboardingCompletion(
-              response: onboardingFeedback.openSoftPaywallOrUpgrade(
-                accessibilityReduceMotion: accessibilityReduceMotion
-              )
-            )
-          }
-        },
-        onSkip: {
-          guard !onboardingCommerceResolution.isResolving else { return }
-          onboardingTelemetry.blockerSetupSkipped(
-            authorizationState: blockerAuthorizationAnalyticsState
+      Group {
+        if blockingSetupAccess == .locked {
+          BlockingSetupLockedView(
+            trialEndTerms: onboardingTrialEndTerms,
+            onBack: backFromAppBlocking,
+            onContinue: continueFromAppBlocking
           )
-          routeOnboardingCompletion(
-            response: onboardingFeedback.continueFreePath(
-              accessibilityReduceMotion: accessibilityReduceMotion
-            )
+        } else {
+          BlockingRehearsalView(
+            distractionChoices: protectionPlanModel.distractionChoices,
+            isCovered: isLoading,
+            onBack: backFromAppBlocking,
+            onContinue: continueFromAppBlocking,
+            onRemindersOnly: leaveAppBlockingWithRemindersOnly
           )
         }
-      )
+      }
       .onAppear {
         grantOnboardingTrialIfNeeded(for: onboardingTrialActivationRoute)
         onboardingTelemetry.blockerSetupStarted()
@@ -697,6 +641,41 @@ struct ContentView: View {
         grantOnboardingTrialIfNeeded(for: current)
       }
     }
+  }
+
+  private func backFromAppBlocking() {
+    if let previousStep = OnboardingFlow.previousStep(before: .appBlocking) {
+      lowRiskTransition(to: previousStep)
+    }
+  }
+
+  private func continueFromAppBlocking() {
+    guard !onboardingCommerceResolution.isResolving else { return }
+    if ProtectionPlanCompletion.landsOnProtectionPlanReady(for: currentCompletionState) {
+      onboardingTelemetry.blockerSetupCompleted()
+      continueSetupStep(to: .protectionPlanReady)
+    } else {
+      onboardingTelemetry.blockerSetupSkipped(
+        authorizationState: blockerAuthorizationAnalyticsState
+      )
+      routeOnboardingCompletion(
+        response: onboardingFeedback.openSoftPaywallOrUpgrade(
+          accessibilityReduceMotion: accessibilityReduceMotion
+        )
+      )
+    }
+  }
+
+  private func leaveAppBlockingWithRemindersOnly() {
+    guard !onboardingCommerceResolution.isResolving else { return }
+    onboardingTelemetry.blockerSetupSkipped(
+      authorizationState: blockerAuthorizationAnalyticsState
+    )
+    routeOnboardingCompletion(
+      response: onboardingFeedback.continueFreePath(
+        accessibilityReduceMotion: accessibilityReduceMotion
+      )
+    )
   }
 
   private func grantOnboardingTrialIfNeeded(for route: OnboardingTrialActivationRoute) {
@@ -826,12 +805,11 @@ struct ContentView: View {
     }
   }
 
-  /// Back from the first question to the Early Value Proof. This reverses the
-  /// intro handoff: the proof lives in the new shell, so we step the shell's
-  /// model back to it and drop the legacy step below `productDemo` so the shell
-  /// is shown again (rendering the proof, not the handoff sentinel).
-  private func backFromQuestionsToProof() {
-    protectionPlanModel.goBack() // handoff sentinel -> earlyValueProof
+  /// Back from the first question reverses the intro handoff: the shell's model
+  /// steps back to Welcome and the step drops below `productDemo`, so the shell
+  /// shows Welcome instead of re-firing the handoff.
+  private func backFromQuestionsToWelcome() {
+    protectionPlanModel.goBack()
     withAnimation(.easeInOut(duration: 0.3)) {
       setOnboardingStep(.welcome)
     }
