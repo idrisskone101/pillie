@@ -149,7 +149,7 @@ struct BlockingRehearsalPhoneCard: View {
                 HStack(spacing: 0) {
                     ForEach(BlockingRehearsalSystemApp.allCases, id: \.self) { app in
                         if app != BlockingRehearsalSystemApp.allCases.first { Spacer(minLength: 0) }
-                        iconTile(app.icon, label: app.label.string(locale: locale))
+                        iconTile(.blank, label: app.label.string(locale: locale))
                     }
                 }
                 .accessibilityHidden(true)
@@ -341,9 +341,9 @@ struct BlockingRehearsalPhoneCard: View {
 
     private var dock: some View {
         HStack(spacing: 0) {
-            ForEach(BlockingRehearsalIcon.dock, id: \.self) { icon in
-                if icon != BlockingRehearsalIcon.dock.first { Spacer(minLength: 0) }
-                iconImage(icon, side: 54, radius: 13)
+            ForEach(0..<4, id: \.self) { slot in
+                if slot != 0 { Spacer(minLength: 0) }
+                iconImage(.blank, side: 54, radius: 13)
             }
         }
         .padding(.vertical, 12)
@@ -353,8 +353,7 @@ struct BlockingRehearsalPhoneCard: View {
     }
 
     private func iconImage(_ icon: BlockingRehearsalIcon, side: CGFloat, radius: CGFloat) -> some View {
-        Image(decorative: icon.rawValue)
-            .resizable()
+        BlockingRehearsalIconTile(icon: icon)
             .frame(width: side, height: side)
             .clipShape(RoundedRectangle(cornerRadius: radius, style: .continuous))
     }
@@ -473,9 +472,7 @@ private struct OpeningApp: View {
     @State private var isOpen = false
 
     var body: some View {
-        Image(decorative: icon.rawValue)
-            .resizable()
-            .scaledToFill()
+        BlockingRehearsalIconTile(icon: icon)
             .frame(width: isOpen ? card.width : from.width, height: isOpen ? card.height : from.height)
             .clipShape(RoundedRectangle(cornerRadius: isOpen ? 40 : 14, style: .continuous))
             .position(x: isOpen ? card.width / 2 : from.midX, y: isOpen ? card.height / 2 : from.midY)

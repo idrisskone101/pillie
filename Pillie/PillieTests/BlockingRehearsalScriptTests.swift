@@ -32,10 +32,9 @@ struct BlockingRehearsalScriptTests {
         #expect(script([]).featuredApp == .tiktok)
     }
 
-    @Test func `The featured app carries its shipped name and its icon`() {
+    @Test func `The featured app carries its shipped name`() {
         #expect(BlockingRehearsalApp.instagram.name(locale: english) == "Instagram")
         #expect(BlockingRehearsalApp.messages.name(locale: Locale(identifier: "de")) == "Nachrichten")
-        #expect(BlockingRehearsalApp.messages.icon == .messages)
     }
 
     @Test func `She checks in one minute after her reminder, across midnight too`() {
@@ -65,10 +64,13 @@ struct BlockingRehearsalScriptTests {
         )
     }
 
-    @Test func `Every bundled icon is in the asset catalog`() {
-        for icon in BlockingRehearsalIcon.allCases {
-            #expect(UIImage(named: icon.rawValue) != nil, "\(icon.rawValue) is missing")
-        }
+    @Test func `The paused apps are neutral tiles with the distraction question's symbols`() {
+        #expect(BlockingRehearsalApp.allCases.map(\.icon) == [
+            .symbol("music.note"),
+            .symbol("camera.fill"),
+            .symbol("play.rectangle.fill"),
+            .symbol("message.fill"),
+        ])
     }
 
     @Test func `Row two is labeled with the catalog's home screen names`() {

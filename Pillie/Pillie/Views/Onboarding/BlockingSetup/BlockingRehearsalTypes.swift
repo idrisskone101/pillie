@@ -103,12 +103,7 @@ enum BlockingRehearsalApp: String, CaseIterable, Equatable {
     }
 
     var icon: BlockingRehearsalIcon {
-        switch self {
-        case .tiktok: .tiktok
-        case .instagram: .instagram
-        case .youtube: .youtube
-        case .messages: .messages
-        }
+        .symbol(choice.symbolName)
     }
 
     func name(locale: Locale) -> String {
@@ -123,15 +118,6 @@ enum BlockingRehearsalSystemApp: CaseIterable, Equatable {
     case maps
     case notes
 
-    var icon: BlockingRehearsalIcon {
-        switch self {
-        case .photos: .photos
-        case .camera: .camera
-        case .maps: .maps
-        case .notes: .notes
-        }
-    }
-
     var label: BlockingRehearsalCopyKey {
         switch self {
         case .photos: .homePhotos
@@ -142,21 +128,12 @@ enum BlockingRehearsalSystemApp: CaseIterable, Equatable {
     }
 }
 
-enum BlockingRehearsalIcon: String, CaseIterable {
-    case tiktok = "RehearsalAppTikTok"
-    case instagram = "RehearsalAppInstagram"
-    case youtube = "RehearsalAppYouTube"
-    case messages = "RehearsalAppMessages"
-    case photos = "RehearsalAppPhotos"
-    case camera = "RehearsalAppCamera"
-    case maps = "RehearsalAppMaps"
-    case notes = "RehearsalAppNotes"
-    case phone = "RehearsalAppPhone"
-    case safari = "RehearsalAppSafari"
-    case mail = "RehearsalAppMail"
-    case music = "RehearsalAppMusic"
-
-    static let dock: [BlockingRehearsalIcon] = [.phone, .safari, .mail, .music]
+/// A tile on the mini Home Screen. The rehearsal ships no other company's
+/// artwork: apps are named in text and drawn as neutral tiles.
+enum BlockingRehearsalIcon: Hashable {
+    /// A dark tile with a coral SF Symbol, for an app the demo pauses.
+    case symbol(String)
+    case blank
 }
 
 /// One tile on the picks card.
@@ -169,8 +146,7 @@ enum BlockingRehearsalPick: Hashable {
     case application(ApplicationToken)
     case webDomain(WebDomainToken)
     #if DEBUG
-    /// The simulator cannot hand out tokens, so QA tiles are drawn from
-    /// bundled art.
+    /// The simulator cannot hand out tokens, so QA draws stand-in tiles.
     case sample(BlockingRehearsalSamplePick)
     #endif
 

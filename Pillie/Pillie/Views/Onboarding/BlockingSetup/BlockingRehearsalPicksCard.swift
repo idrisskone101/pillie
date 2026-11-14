@@ -143,8 +143,7 @@ struct BlockingRehearsalPicksCard: View {
                     .font(.system(size: 24, weight: .semibold))
                     .foregroundStyle(PillieTheme.coral)
             case .application(let icon):
-                Image(decorative: icon.rawValue)
-                    .resizable()
+                BlockingRehearsalIconTile(icon: icon)
                     .frame(width: PickTileMetrics.side, height: PickTileMetrics.side)
             case .webDomain:
                 Image(systemName: "globe")

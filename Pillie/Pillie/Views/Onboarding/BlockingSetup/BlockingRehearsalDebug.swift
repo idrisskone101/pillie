@@ -95,11 +95,11 @@ struct BlockingRehearsalSamplePick: Hashable {
     private static let cycle: [BlockingRehearsalSamplePick] = [
         BlockingRehearsalSamplePick(kind: .category(symbol: "bubble.left.fill"), name: "Social"),
         BlockingRehearsalSamplePick(kind: .category(symbol: "gamecontroller.fill"), name: "Games"),
-        BlockingRehearsalSamplePick(kind: .application(.youtube), name: "YouTube"),
+        BlockingRehearsalSamplePick(kind: .application(BlockingRehearsalApp.youtube.icon), name: "YouTube"),
         BlockingRehearsalSamplePick(kind: .webDomain, name: "reddit.com"),
-        BlockingRehearsalSamplePick(kind: .application(.tiktok), name: "TikTok"),
-        BlockingRehearsalSamplePick(kind: .application(.instagram), name: "Instagram"),
-        BlockingRehearsalSamplePick(kind: .application(.messages), name: "Messages"),
+        BlockingRehearsalSamplePick(kind: .application(BlockingRehearsalApp.tiktok.icon), name: "TikTok"),
+        BlockingRehearsalSamplePick(kind: .application(BlockingRehearsalApp.instagram.icon), name: "Instagram"),
+        BlockingRehearsalSamplePick(kind: .application(BlockingRehearsalApp.messages.icon), name: "Messages"),
         BlockingRehearsalSamplePick(kind: .webDomain, name: "news.example.com"),
     ]
 
