@@ -369,7 +369,6 @@ struct BlockingRehearsalPhoneCard: View {
                     .frame(width: 40, height: 40)
                     .clipShape(RoundedRectangle(cornerRadius: 11, style: .continuous))
                 iconImage(script.featuredApp.icon, side: 40, radius: 11)
-                    .opacity(0.35)
             }
             .accessibilityHidden(true)
 
