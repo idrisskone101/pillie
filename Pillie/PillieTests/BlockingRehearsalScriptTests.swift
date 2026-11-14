@@ -73,6 +73,18 @@ struct BlockingRehearsalScriptTests {
         ])
     }
 
+    @Test func `The rest of the Home Screen is light tiles with their own symbols`() {
+        #expect(BlockingRehearsalSystemApp.allCases.map(\.icon) == [
+            .plain("photo.fill"),
+            .plain("camera.shutter.button.fill"),
+            .plain("map.fill"),
+            .plain("note.text"),
+        ])
+        #expect(BlockingRehearsalIcon.dock == [
+            .plain("phone.fill"), .plain("safari.fill"), .plain("envelope.fill"), .plain("headphones"),
+        ])
+    }
+
     @Test func `Row two is labeled with the catalog's home screen names`() {
         #expect(BlockingRehearsalSystemApp.allCases.map { $0.label.string(locale: english) }
             == ["Photos", "Camera", "Maps", "Notes"])

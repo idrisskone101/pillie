@@ -149,7 +149,7 @@ struct BlockingRehearsalPhoneCard: View {
                 HStack(spacing: 0) {
                     ForEach(BlockingRehearsalSystemApp.allCases, id: \.self) { app in
                         if app != BlockingRehearsalSystemApp.allCases.first { Spacer(minLength: 0) }
-                        iconTile(.blank, label: app.label.string(locale: locale))
+                        iconTile(app.icon, label: app.label.string(locale: locale))
                     }
                 }
                 .accessibilityHidden(true)
@@ -341,9 +341,9 @@ struct BlockingRehearsalPhoneCard: View {
 
     private var dock: some View {
         HStack(spacing: 0) {
-            ForEach(0..<4, id: \.self) { slot in
-                if slot != 0 { Spacer(minLength: 0) }
-                iconImage(.blank, side: 54, radius: 13)
+            ForEach(BlockingRehearsalIcon.dock, id: \.self) { icon in
+                if icon != BlockingRehearsalIcon.dock.first { Spacer(minLength: 0) }
+                iconImage(icon, side: 54, radius: 13)
             }
         }
         .padding(.vertical, 12)

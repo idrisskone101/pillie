@@ -118,6 +118,15 @@ enum BlockingRehearsalSystemApp: CaseIterable, Equatable {
     case maps
     case notes
 
+    var icon: BlockingRehearsalIcon {
+        switch self {
+        case .photos: .plain("photo.fill")
+        case .camera: .plain("camera.shutter.button.fill")
+        case .maps: .plain("map.fill")
+        case .notes: .plain("note.text")
+        }
+    }
+
     var label: BlockingRehearsalCopyKey {
         switch self {
         case .photos: .homePhotos
@@ -133,7 +142,12 @@ enum BlockingRehearsalSystemApp: CaseIterable, Equatable {
 enum BlockingRehearsalIcon: Hashable {
     /// A dark tile with a coral SF Symbol, for an app the demo pauses.
     case symbol(String)
-    case blank
+    /// A light tile with a muted SF Symbol, for the rest of the Home Screen.
+    case plain(String)
+
+    static let dock: [BlockingRehearsalIcon] = [
+        .plain("phone.fill"), .plain("safari.fill"), .plain("envelope.fill"), .plain("headphones"),
+    ]
 }
 
 /// One tile on the picks card.
