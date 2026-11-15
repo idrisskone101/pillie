@@ -9,10 +9,8 @@ struct BlockingRehearsalDebugSeedTests {
         BlockingRehearsalDebugSeed(link: "pillie://debug\(path)\(query.isEmpty ? "" : "?\(query)")")
     }
 
-    private func opened(_ query: String, voiceOver: Bool = false) throws -> (BlockingRehearsalState, [BlockingRehearsalEffect]) {
-        var opening = BlockingRehearsalOpening(
-            demoSeen: false, hasSelection: false, isAuthorized: true, voiceOverRunning: voiceOver
-        )
+    private func opened(_ query: String) throws -> (BlockingRehearsalState, [BlockingRehearsalEffect]) {
+        var opening = BlockingRehearsalOpening(demoSeen: false, hasSelection: false, isAuthorized: true)
         opening.debugSeed = try #require(seed(query))
         var state = BlockingRehearsalState()
         let effects = state.handle(.appeared(opening))
@@ -44,12 +42,6 @@ struct BlockingRehearsalDebugSeedTests {
         #expect(seed("stage=refused")?.refusal == .notAllowed)
         #expect(seed("stage=refused&reason=cancelled")?.refusal == .notAllowed)
         #expect(seed("stage=refused&reason=conflict")?.refusal == .heldByAnotherApp)
-    }
-
-    @Test func `A seeded beat holds still unless self-play is turned on`() {
-        #expect(seed("stage=reminder")?.selfPlays == false)
-        #expect(seed("stage=reminder&selfPlay=off")?.selfPlays == false)
-        #expect(seed("stage=reminder&selfPlay=on")?.selfPlays == true)
     }
 
     @Test func `Access can be drawn as not yet asked`() {
@@ -85,13 +77,7 @@ struct BlockingRehearsalDebugSeedTests {
 
         var tapped = state
         #expect(tapped.handle(.beatControlTapped) == [.report(.played(.paused, by: .herTap))])
-        #expect(tapped.timer == .coralSpreads(by: .herTap))
-    }
-
-    @Test func `With self-play on a seeded beat plays itself`() throws {
-        let (state, _) = try opened("stage=shake&selfPlay=on")
-        #expect(state.stage == .shake)
-        #expect(state.timer == .selfPlay(.shake))
+        #expect(tapped.timer == .coralSpreads)
     }
 
     @Test func `A seeded refusal carries its reason and can be answered`() throws {

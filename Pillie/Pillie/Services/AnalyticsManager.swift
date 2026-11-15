@@ -817,7 +817,6 @@ enum AnalyticsEvent: String, CaseIterable {
   /// with a real shake carries `shake_count` 1.
   case blockingRehearsalStageViewed = "blocking_rehearsal_stage_viewed"
   case blockingRehearsalBeatPlayed = "blocking_rehearsal_beat_played"
-  case blockingRehearsalBeatSelfPlayed = "blocking_rehearsal_beat_self_played"
   case blockingRehearsalAskAgain = "blocking_rehearsal_ask_again"
   case blockingRehearsalRemindersOnly = "blocking_rehearsal_reminders_only"
   /// A handled failure (#179). Carries `domain` + `message` + `code` + `severity`

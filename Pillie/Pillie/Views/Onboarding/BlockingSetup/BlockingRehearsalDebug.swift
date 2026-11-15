@@ -9,7 +9,6 @@
 //        &selected=N                  N sample tiles on the picks card (implies stage=picks)
 //        &reason=cancelled|conflict   which refusal the refused stage shows
 //        &featured=tiktok|instagram|youtube|messages
-//        &selfPlay=on                 let a seeded beat play itself (it holds still otherwise)
 //        &access=notAsked             draw the stage as before Apple's prompt (the simulator is always allowed)
 //        &terms=hard&expired=1        the locked screen
 //
@@ -27,8 +26,6 @@ struct BlockingRehearsalDebugSeed: Equatable {
     let stage: BlockingRehearsalStage
     let refusal: ScreenTimeRefusal
     let featuredApp: BlockingRehearsalApp?
-    /// False by default, so a seeded beat is the same screenshot every run.
-    let selfPlays: Bool
     /// The simulator always reports Screen Time as allowed. This draws the
     /// stage as a first-time user sees it, until the next request "allows" it.
     let accessNotAsked: Bool
@@ -53,7 +50,6 @@ struct BlockingRehearsalDebugSeed: Equatable {
 
         refusal = value("reason").flatMap(ScreenTimeRefusal.init(rawValue:)) ?? .notAllowed
         featuredApp = value("featured").flatMap(BlockingRehearsalApp.init(rawValue:))
-        selfPlays = value("selfPlay") == "on"
         accessNotAsked = value("access") == "notAsked"
         sampleTileCount = stage == .picks ? (selected > 0 ? selected : 4) : 0
     }

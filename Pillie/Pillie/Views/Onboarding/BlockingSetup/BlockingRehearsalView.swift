@@ -12,8 +12,6 @@ import SwiftUI
 struct BlockingRehearsalView: View {
     @Environment(PillStore.self) private var store
     @Environment(\.locale) private var locale
-    @Environment(\.scenePhase) private var scenePhase
-    @Environment(\.accessibilityVoiceOverEnabled) private var voiceOverEnabled
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     @State private var state = BlockingRehearsalState()
@@ -85,9 +83,7 @@ struct BlockingRehearsalView: View {
         let opening = BlockingRehearsalOpening(
             demoSeen: demoSeen,
             hasSelection: blockingManager.selectionState.hasSelection,
-            isAuthorized: blockingManager.isAuthorized,
-            voiceOverRunning: voiceOverEnabled,
-            sceneActive: scenePhase == .active
+            isAuthorized: blockingManager.isAuthorized
         )
         #if DEBUG
         var seeded = opening
@@ -99,13 +95,13 @@ struct BlockingRehearsalView: View {
     }
 
     private var coverIsUp: Bool {
-        state.stage == .shake || (state.stage == .paused && state.resolvedBy != nil)
+        state.stage == .shake || (state.stage == .paused && state.isLeavingBeat)
     }
 
     private var coverAnimation: Animation {
         guard !reduceMotion else { return .easeInOut(duration: 0.3) }
-        let pressTime = state.resolvedBy == .demo ? 0.3 : 0.1
-        return .easeInOut(duration: 0.4).delay(coverIsUp ? pressTime : 0)
+        // Lets her see Open Pillie press before the coral spreads.
+        return .easeInOut(duration: 0.4).delay(coverIsUp ? 0.1 : 0)
     }
 
     var body: some View {
@@ -188,12 +184,6 @@ struct BlockingRehearsalView: View {
         .onChange(of: blockingManager.isAuthorized) { _, isAuthorized in
             send(.authorizationChanged(isAuthorized: isAuthorized))
         }
-        .onChange(of: voiceOverEnabled) { _, isRunning in
-            send(.voiceOverChanged(isRunning: isRunning))
-        }
-        .onChange(of: scenePhase) { _, phase in
-            send(.sceneActivityChanged(isActive: phase == .active))
-        }
     }
 
     // MARK: - Page
@@ -274,7 +264,7 @@ struct BlockingRehearsalView: View {
         if let scene = BlockingRehearsalPhoneCard.Scene(stage) {
             BlockingRehearsalPhoneCard(
                 stage: scene,
-                resolvedBy: state.resolvedBy,
+                isLeaving: state.isLeavingBeat,
                 isLive: isLive,
                 script: script,
                 content: content,

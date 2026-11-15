@@ -3,8 +3,9 @@
 //  Pillie
 //
 //  The whole journey on the open blocking step as one value: three beats, the
-//  ask, Apple's refusal, her picks. Events go in, effects come out. Time enters
-//  as "the wait you asked for ran out", so every path runs without a clock.
+//  ask, Apple's refusal, her picks. Events go in, effects come out. No beat
+//  moves on by itself: each waits for her tap or shake. Time enters only as
+//  "the exit you asked for has played", so every path runs without a clock.
 //
 
 import Foundation
@@ -22,10 +23,11 @@ struct BlockingRehearsalState: Equatable {
         }
     }
 
-    var resolvedBy: BlockingRehearsalPlayer? {
+    /// She has played the beat on screen and its exit is running.
+    var isLeavingBeat: Bool {
         switch position {
-        case .reminder(.leaving(let player)), .paused(.leaving(let player)): player
-        default: nil
+        case .reminder(.leaving), .paused(.leaving): true
+        default: false
         }
     }
 
@@ -53,19 +55,17 @@ struct BlockingRehearsalState: Equatable {
     /// `.task(id:)` and sends it back with `.timerFired`.
     var timer: BlockingRehearsalTimer? {
         switch position {
-        case .reminder(.waiting): selfPlays ? .selfPlay(.reminder) : nil
-        case .paused(.waiting): selfPlays ? .selfPlay(.paused) : nil
-        case .shake(.waiting): selfPlays ? .selfPlay(.shake) : nil
-        case .reminder(.leaving(let player)): .appPressed(by: player)
-        case .paused(.leaving(let player)): .coralSpreads(by: player)
+        case .reminder(.leaving): .appPressed
+        case .paused(.leaving): .coralSpreads
         case .shake(.popped): .settleAfterPop
-        case .unopened, .shake(.popping), .ask, .refused, .picks: nil
+        case .unopened, .reminder(.waiting), .paused(.waiting), .shake(.waiting), .shake(.popping),
+             .ask, .refused, .picks: nil
         }
     }
 
     private enum BeatPhase: Equatable {
         case waiting
-        case leaving(by: BlockingRehearsalPlayer)
+        case leaving
     }
 
     private enum ShakePhase: Equatable {
@@ -87,20 +87,6 @@ struct BlockingRehearsalState: Equatable {
     private var position: Position = .unopened
     private(set) var isAuthorized = false
     private var hasSelection = false
-    private var voiceOverRunning = false
-    private var sceneActive = true
-
-    #if DEBUG
-    /// A debug-seeded beat holds still for screenshots unless `selfPlay=on`.
-    private var holdsBeats = false
-    #endif
-
-    private var selfPlays: Bool {
-        #if DEBUG
-        if holdsBeats { return false }
-        #endif
-        return !voiceOverRunning && sceneActive
-    }
 
     /// Total: every event is legal in every position. One that does not apply
     /// returns `[]` and changes nothing.
@@ -110,8 +96,6 @@ struct BlockingRehearsalState: Equatable {
             guard position == .unopened else { return [] }
             hasSelection = opening.hasSelection
             isAuthorized = opening.isAuthorized
-            voiceOverRunning = opening.voiceOverRunning
-            sceneActive = opening.sceneActive
             #if DEBUG
             if let seed = opening.debugSeed {
                 return jump(to: seed)
@@ -140,8 +124,6 @@ struct BlockingRehearsalState: Equatable {
         case .timerFired(let fired):
             guard fired == timer else { return [] }
             switch fired {
-            case .selfPlay:
-                return play(by: .demo)
             case .appPressed:
                 return enter(.paused(.waiting))
             case .coralSpreads:
@@ -199,14 +181,6 @@ struct BlockingRehearsalState: Equatable {
             self.isAuthorized = isAuthorized
             return []
 
-        case .voiceOverChanged(let isRunning):
-            voiceOverRunning = isRunning
-            return []
-
-        case .sceneActivityChanged(let isActive):
-            sceneActive = isActive
-            return []
-
         #if DEBUG
         case .debugSeeded(let seed):
             guard position != .unopened else { return [] }
@@ -217,7 +191,6 @@ struct BlockingRehearsalState: Equatable {
 
     #if DEBUG
     private mutating func jump(to seed: BlockingRehearsalDebugSeed) -> [BlockingRehearsalEffect] {
-        holdsBeats = !seed.selfPlays
         if seed.accessNotAsked { isAuthorized = false }
         switch seed.stage {
         case .reminder: return enter(.reminder(.waiting))
@@ -242,10 +215,10 @@ struct BlockingRehearsalState: Equatable {
     private mutating func play(by player: BlockingRehearsalPlayer) -> [BlockingRehearsalEffect] {
         switch position {
         case .reminder(.waiting):
-            position = .reminder(.leaving(by: player))
+            position = .reminder(.leaving)
             return [.report(.played(.reminder, by: player))]
         case .paused(.waiting):
-            position = .paused(.leaving(by: player))
+            position = .paused(.leaving)
             return [.report(.played(.paused, by: player))]
         case .shake(.waiting):
             position = .shake(.popping)
@@ -295,7 +268,6 @@ enum BlockingRehearsalBeat: String, CaseIterable, Hashable {
 enum BlockingRehearsalPlayer: Hashable {
     case herTap
     case herShake
-    case demo
 }
 
 enum ScreenTimeAuthorizationOutcome: Equatable {
@@ -304,20 +276,13 @@ enum ScreenTimeAuthorizationOutcome: Equatable {
 }
 
 enum BlockingRehearsalTimer: Hashable {
-    case selfPlay(BlockingRehearsalBeat)
-    case appPressed(by: BlockingRehearsalPlayer)
-    case coralSpreads(by: BlockingRehearsalPlayer)
+    case appPressed
+    case coralSpreads
     case settleAfterPop
 
     var duration: Duration {
         switch self {
-        case .selfPlay(.reminder): .milliseconds(3500)
-        case .selfPlay(.paused): .seconds(3)
-        case .selfPlay(.shake): .seconds(4)
-        // The demo's hand travels and taps before the press everyone sees.
-        case .appPressed(by: .demo): .milliseconds(900)
         case .appPressed: .milliseconds(450)
-        case .coralSpreads(by: .demo): .milliseconds(700)
         case .coralSpreads: .milliseconds(500)
         case .settleAfterPop: .milliseconds(500)
         }
@@ -328,8 +293,6 @@ struct BlockingRehearsalOpening: Equatable {
     var demoSeen: Bool
     var hasSelection: Bool
     var isAuthorized: Bool
-    var voiceOverRunning: Bool
-    var sceneActive = true
     #if DEBUG
     var debugSeed: BlockingRehearsalDebugSeed?
     #endif
@@ -351,8 +314,6 @@ enum BlockingRehearsalEvent: Equatable {
 
     case selectionChanged(hasSelection: Bool)
     case authorizationChanged(isAuthorized: Bool)
-    case voiceOverChanged(isRunning: Bool)
-    case sceneActivityChanged(isActive: Bool)
 
     #if DEBUG
     case debugSeeded(BlockingRehearsalDebugSeed)

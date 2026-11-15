@@ -2,24 +2,20 @@
 # app.log (category analytics). `fresh` first, because blocker_setup_started and
 # blocker_setup_skipped fire once per install.
 #
-# Pass 1 plays the beats by hand from a held first beat. app.log must hold three
+# Pass 1 plays the beats by hand from a seeded first beat. app.log must hold three
 # blocking_rehearsal_beat_played lines, the shake with shake_count=1 (a tap on
 # the stage stands in for a shake on the simulator).
 #
-# Pass 2 touches nothing: selfPlay=on lets the seeded first beat play itself and
-# each later beat follows on its own (3.5 s, 3 s, 4 s). Opening the link takes
-# longer than the first beat lasts, so the flow only waits for the ask; app.log
-# must hold three blocking_rehearsal_beat_self_played lines.
-# onboarding-walkthrough shoots each self-played beat.
+# No beat plays itself; onboarding-walkthrough proves each one waits.
 #
-# Pass 3 walks the refusal. The simulator approves Screen Time on its own, so
+# Pass 2 walks the refusal. The simulator approves Screen Time on its own, so
 # screen-time-refused forces Apple's "Don't Allow". app.log must hold
 # screen_time_permission_requested and _completed twice,
 # blocking_rehearsal_ask_again, blocking_rehearsal_reminders_only with
 # step=rehearsal_refused, and blocker_setup_skipped. "Use reminders only" then
 # finishes onboarding on Today.
 #
-# Pass 4 leaves from the ask once Screen Time is allowed: app.log must hold
+# Pass 3 leaves from the ask once Screen Time is allowed: app.log must hold
 # blocking_rehearsal_reminders_only with step=rehearsal_ask.
 fresh
 launch
@@ -37,13 +33,6 @@ tap --id blockingRehearsalShakeBeat
 wait id blockingRehearsalCheckedInPill 15
 sleep 1
 shot by-hand-ask
-
-openurl "pillie://debug/plus-app-blocking-setup?stage=reminder&selfPlay=on&terms=hard&lang=en"
-wait id blockingRehearsalTapInstead 20
-wait id blockingRehearsalCheckedInPill 20
-expect id appBlockingTrialLine
-sleep 1
-shot self-play-ask
 
 openurl "pillie://debug/screen-time-refused?reason=cancelled&lang=en"
 wait text "Apple asks for Screen Time access first" 10

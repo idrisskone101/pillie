@@ -12,9 +12,9 @@
 # features/onboarding.md Gotchas). reminderPlan's real CTA already lands on
 # appBlocking directly.
 #
-# appBlocking is the rehearsal (BlockingRehearsalView). Nobody touches it here,
-# so each beat plays itself: this is the self-play pass on a real fresh install.
-# Its picks need FamilyControls tokens, which the simulator cannot hand out, so
+# appBlocking is the rehearsal (BlockingRehearsalView). Each beat waits for her,
+# so the flow holds on every beat longer than a reader would, proves it is still
+# there, then plays it with the beat's own control. Its picks need FamilyControls tokens, which the simulator cannot hand out, so
 # they are reached via the `plus-app-blocking-setup?selected=` QA seam, then that
 # screen's real "Continue" CTA.
 
@@ -100,19 +100,29 @@ wait id protectionPlanPrimaryCTA 15
 shot reminder-plan
 tap --id protectionPlanPrimaryCTA
 
-# appBlocking, beat 1: the reminder lands on the mini Home Screen. After 3.5 s
-# untouched the demo taps the featured app (TikTok, the distraction picked above).
+# appBlocking, beat 1: the reminder lands on the mini Home Screen and waits
+# until she taps the featured app (TikTok, the distraction picked above).
 wait id blockingRehearsalBanner 15
-sleep 1  # the banner drops in 0.6 s after the beat opens
+sleep 6  # past the 3.5 s the beat used to play itself after
+expect id blockingRehearsalFeaturedApp
+expect-not id blockingRehearsalPauseCard
 shot rehearsal-reminder
+tap --id blockingRehearsalFeaturedApp
 
-# Beat 2: the app is paused. After 3 s the demo presses "Open Pillie".
+# Beat 2: the app is paused until she presses "Open Pillie".
 wait id blockingRehearsalOpenPillie 10
+sleep 6
+expect id blockingRehearsalPauseCard
+expect-not id blockingRehearsalTapInstead
 shot rehearsal-paused
+tap --id blockingRehearsalOpenPillie
 
-# Beat 3: the coral shake cover. After 4 s the clip plays through on its own.
+# Beat 3: the coral shake cover waits for a shake or "Tap to check in instead".
 wait id blockingRehearsalTapInstead 10
+sleep 6
+expect-not id blockingRehearsalCheckedInPill
 shot rehearsal-shake
+tap --id blockingRehearsalTapInstead
 
 # The ask, with the trial line of a fresh reverse trial. The simulator reports
 # Screen Time as already allowed, so this is the ask after Allow: no Apple line,

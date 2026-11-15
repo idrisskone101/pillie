@@ -38,23 +38,22 @@ struct BlockingRehearsalTelemetryTests {
         #expect(recorded(.viewed(.refused), .viewed(.refused)).count == 2)
     }
 
-    @Test func `A beat she played and a beat the demo played are different events`() {
+    @Test func `Each beat she plays is reported with its step`() {
         #expect(
-            recorded(.played(.reminder, by: .herTap), .played(.paused, by: .demo))
+            recorded(.played(.reminder, by: .herTap), .played(.paused, by: .herTap))
                 == [
                     event(.blockingRehearsalBeatPlayed, step: .rehearsalReminder),
-                    event(.blockingRehearsalBeatSelfPlayed, step: .rehearsalPaused),
+                    event(.blockingRehearsalBeatPlayed, step: .rehearsalPaused),
                 ]
         )
     }
 
-    @Test func `The shake beat says whether she shook, tapped, or waited`() {
+    @Test func `The shake beat says whether she shook or tapped`() {
         #expect(
-            recorded(.played(.shake, by: .herShake), .played(.shake, by: .herTap), .played(.shake, by: .demo))
+            recorded(.played(.shake, by: .herShake), .played(.shake, by: .herTap))
                 == [
                     event(.blockingRehearsalBeatPlayed, step: .rehearsalShake, shakeCount: 1),
                     event(.blockingRehearsalBeatPlayed, step: .rehearsalShake, shakeCount: 0),
-                    event(.blockingRehearsalBeatSelfPlayed, step: .rehearsalShake),
                 ]
         )
     }

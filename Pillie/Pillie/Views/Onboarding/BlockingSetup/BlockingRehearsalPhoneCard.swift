@@ -25,7 +25,8 @@ struct BlockingRehearsalPhoneCard: View {
     }
 
     let stage: Scene
-    let resolvedBy: BlockingRehearsalPlayer?
+    /// She played this beat and its exit is running.
+    let isLeaving: Bool
     /// False while the coral cover still hides the ask, so its entrance plays
     /// when she can see it.
     let isLive: Bool
@@ -40,9 +41,7 @@ struct BlockingRehearsalPhoneCard: View {
     @State private var bannerLanded = false
     @State private var showsHand = false
     @State private var haloBreathes = false
-
-    private var isLeaving: Bool { resolvedBy != nil }
-    private var playedByDemo: Bool { resolvedBy == .demo }
+    @State private var openPillieBreathes = false
 
     var body: some View {
         GeometryReader { proxy in
@@ -63,7 +62,7 @@ struct BlockingRehearsalPhoneCard: View {
                         icon: script.featuredApp.icon,
                         from: proxy[anchor],
                         card: proxy.size,
-                        delay: playedByDemo ? 0.55 : 0.1
+                        delay: 0.1
                     )
                 }
             }
@@ -88,10 +87,19 @@ struct BlockingRehearsalPhoneCard: View {
         bannerLanded = false
         showsHand = false
         haloBreathes = false
+        openPillieBreathes = false
         do {
             if stage == .paused {
                 try await Task.sleep(for: .milliseconds(550))
                 InteractionFeedback.live.perform(.meaningfulCommit)
+                // Nothing moves on without her, so once she has read the card
+                // the way forward breathes like the app tile did.
+                try await Task.sleep(for: .milliseconds(1800))
+                if !reduceMotion {
+                    withAnimation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true)) {
+                        openPillieBreathes = true
+                    }
+                }
             }
             guard stage == .reminder else { return }
             try await Task.sleep(for: .milliseconds(600))
@@ -265,7 +273,7 @@ struct BlockingRehearsalPhoneCard: View {
                 .grayscale(dimmed ? 1 : 0)
                 .opacity(dimmed ? 0.38 : 1)
                 .scaleEffect(pressed ? 0.92 : 1)
-                .animation(.easeOut(duration: 0.1).delay(playedByDemo ? 0.45 : 0), value: pressed)
+                .animation(.easeOut(duration: 0.1), value: pressed)
                 .animation(.easeOut(duration: 0.3), value: dimmed)
                 .background { haloView(halo) }
                 .anchorPreference(key: FeaturedIconBounds.self, value: .bounds) {
@@ -323,14 +331,6 @@ struct BlockingRehearsalPhoneCard: View {
         }
         .font(.system(size: 28, weight: .medium))
         .frame(width: 34, height: 34)
-        .keyframeAnimator(initialValue: 1.0, trigger: playedByDemo && !reduceMotion) { hand, scale in
-            hand.scaleEffect(scale, anchor: .topLeading)
-        } keyframes: { _ in
-            KeyframeTrack {
-                LinearKeyframe(0.8, duration: 0.2)
-                SpringKeyframe(1.0, duration: 0.25)
-            }
-        }
         .flipsForRightToLeftLayoutDirection(true)
         .padding(.trailing, -16)
         .padding(.bottom, 18)
@@ -403,8 +403,9 @@ struct BlockingRehearsalPhoneCard: View {
             }
             .buttonStyle(.plain)
             .disabled(isLeaving)
+            .scaleEffect(openPillieBreathes && !isLeaving ? 1.04 : 1)
             .scaleEffect(isLeaving ? 0.95 : 1)
-            .animation(.easeOut(duration: 0.15).delay(playedByDemo ? 0.15 : 0), value: isLeaving)
+            .animation(.easeOut(duration: 0.15), value: isLeaving)
             .accessibilityIdentifier("blockingRehearsalOpenPillie")
         }
         .padding(.top, 24)
