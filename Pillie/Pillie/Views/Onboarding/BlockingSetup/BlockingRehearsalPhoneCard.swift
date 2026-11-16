@@ -105,7 +105,9 @@ struct BlockingRehearsalPhoneCard: View {
                 }
             }
             guard stage == .reminder else { return }
-            try await Task.sleep(for: .milliseconds(600))
+            // The card rises in, then holds on "This is a practice run." long
+            // enough to read before the reminder rings.
+            try await Task.sleep(for: .milliseconds(2000))
             withAnimation(reduceMotion ? .easeOut(duration: 0.3) : .spring(response: 0.5, dampingFraction: 0.72)) {
                 bannerLanded = true
             }
@@ -115,7 +117,7 @@ struct BlockingRehearsalPhoneCard: View {
                     haloBreathes = true
                 }
             }
-            try await Task.sleep(for: .milliseconds(900))
+            try await Task.sleep(for: .milliseconds(1000))
             withAnimation(.easeOut(duration: 0.3)) { showsHand = true }
         } catch {
             return
@@ -138,6 +140,7 @@ struct BlockingRehearsalPhoneCard: View {
         VStack(spacing: Metrics.rowSpacing) {
             if stage == .reminder {
                 banner
+                    .overlay { practiceRunChip }
                     .transition(.opacity)
             }
 
@@ -177,6 +180,30 @@ struct BlockingRehearsalPhoneCard: View {
         .padding(.top, Metrics.topInset)
         .padding(.horizontal, Metrics.inset)
         .padding(.bottom, Metrics.bottomInset)
+    }
+
+    /// Holds the banner's place until the reminder drops in over it.
+    private var practiceRunChip: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "play.circle.fill")
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundStyle(PillieTheme.coral)
+                .accessibilityHidden(true)
+            Text(content.practiceRun)
+                .font(.pillie(15, weight: .semibold))
+                .foregroundStyle(PillieTheme.textPrimary.opacity(0.75))
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+        }
+        .padding(.vertical, 10)
+        .padding(.horizontal, 16)
+        .background(.white.opacity(0.7), in: Capsule())
+        .scaleEffect(bannerLanded ? 0.9 : 1)
+        .opacity(bannerLanded ? 0 : 1)
+        .animation(.easeOut(duration: 0.2), value: bannerLanded)
+        .allowsHitTesting(false)
+        .accessibilityHidden(bannerLanded)
+        .accessibilityIdentifier("blockingRehearsalPracticeRun")
     }
 
     private var banner: some View {

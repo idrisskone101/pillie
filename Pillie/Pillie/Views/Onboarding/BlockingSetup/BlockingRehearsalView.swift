@@ -142,9 +142,14 @@ struct BlockingRehearsalView: View {
             selection: Bindable(blockingManager).activitySelection
         )
         .onChange(of: isCovered, initial: true) { _, isCovered in
-            guard !isCovered else { return }
-            appeared = true
+            guard !isCovered, !appeared else { return }
             send(.appeared(opening))
+            // Set on the first frame, the entrance has nothing to animate
+            // from and the page just appears. One frame later it plays.
+            Task {
+                try? await Task.sleep(for: .milliseconds(50))
+                appeared = true
+            }
         }
         #if DEBUG
         .onChange(of: debugSeedLink) { _, link in
@@ -211,12 +216,12 @@ struct BlockingRehearsalView: View {
                 copy(chrome, isCompact: isCompact)
                     .id(stage)
                     .transition(.opacity)
-                    .modifier(FadeInUp(appeared: appeared, delay: 0))
+                    .modifier(FadeInUp(appeared: appeared, delay: PillieTheme.stagger2))
                     .padding(.horizontal, 24)
                     .padding(.top, isCompact ? 16 : 34)
 
                 card(stage, isLive: isLive, script: script, content: content)
-                    .modifier(FadeInUp(appeared: appeared, delay: PillieTheme.stagger3))
+                    .modifier(CardRise(appeared: appeared, reduceMotion: reduceMotion))
                     .padding(.top, isCompact ? 16 : 26)
                     .layoutPriority(-1)
 
@@ -430,6 +435,26 @@ struct BlockingRehearsalView: View {
         case .report(let signal):
             telemetry.record(signal)
         }
+    }
+}
+
+/// The phone card arrives after the words, rising further and slower than
+/// they do, so the demo reads as something about to start.
+private struct CardRise: ViewModifier {
+    let appeared: Bool
+    let reduceMotion: Bool
+
+    func body(content: Content) -> some View {
+        content
+            .offset(y: appeared || reduceMotion ? 0 : 40)
+            .scaleEffect(appeared || reduceMotion ? 1 : 0.96, anchor: .top)
+            .opacity(appeared ? 1 : 0)
+            .animation(
+                reduceMotion
+                    ? .easeOut(duration: 0.3).delay(0.2)
+                    : .spring(response: 0.7, dampingFraction: 0.86).delay(0.35),
+                value: appeared
+            )
     }
 }
 

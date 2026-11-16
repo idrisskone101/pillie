@@ -26,7 +26,8 @@ struct BlockingRehearsalContent: Equatable {
     let pauseCardBody: String
     let openPillie: String
 
-    let shakeEyebrow: String
+    /// Said on the first beat before the reminder lands, and over the shake.
+    let practiceRun: String
     let shakeHeadline: String
     let tapInstead: String
 
@@ -83,7 +84,7 @@ struct BlockingRehearsalContent: Equatable {
             )
         case .shake:
             return BlockingRehearsalChrome(
-                layout: .shakeCover, header: nil, eyebrow: shakeEyebrow,
+                layout: .shakeCover, header: nil, eyebrow: practiceRun,
                 title: shakeHeadline, body: nil,
                 footnotes: [],
                 primary: .init(title: tapInstead, event: .beatControlTapped, showsArrow: false),
@@ -153,7 +154,7 @@ struct BlockingRehearsalContent: Equatable {
                 "paywall.mockup.shield.subtitle", table: "Commerce", locale: locale
             ),
             openPillie: BlockingRehearsalCopyKey.pausedOpenPillie.string(locale: locale),
-            shakeEyebrow: BlockingRehearsalCopyKey.shakeEyebrow.string(locale: locale),
+            practiceRun: BlockingRehearsalCopyKey.shakeEyebrow.string(locale: locale),
             shakeHeadline: PillieLocalization.string("today.action.shake", locale: locale),
             tapInstead: PillieLocalization.string("today.action.tap_instead", locale: locale),
             askTitle: breakingAfterFirstSentence(
