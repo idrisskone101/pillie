@@ -286,7 +286,6 @@ struct BlockingRehearsalView: View {
         } else if stage == .picks {
             ScrollView(showsIndicators: false) {
                 BlockingRehearsalPicksCard(
-                    grid: BlockingRehearsalPickGrid(picks: picks),
                     content: content,
                     onChange: { send(.chooseTapped) }
                 )
@@ -310,15 +309,6 @@ struct BlockingRehearsalView: View {
             }
             .transition(.opacity)
         }
-    }
-
-    private var picks: [BlockingRehearsalPick] {
-        #if DEBUG
-        if let count = blockingManager.debugSelectionCountOverride, count > 0 {
-            return BlockingRehearsalSamplePick.tiles(count: count)
-        }
-        #endif
-        return BlockingRehearsalPick.picks(in: blockingManager.activitySelection)
     }
 
     // MARK: - Footer

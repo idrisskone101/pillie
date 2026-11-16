@@ -4123,16 +4123,6 @@
     {
       "issue": "blocking-rehearsal",
       "table": "Localizable",
-      "key": "onboarding.blocking_rehearsal.picks.category_caption",
-      "create": true,
-      "comment": "Blocking rehearsal caption under a picked category tile [standard]",
-      "en": "All apps",
-      "de": "Alle Apps",
-      "it": "Tutte le app"
-    },
-    {
-      "issue": "blocking-rehearsal",
-      "table": "Localizable",
       "key": "onboarding.blocking_rehearsal.picks.pause_body",
       "create": true,
       "comment": "Blocking rehearsal picks card, first rhythm row body under the reminder time [standard]",

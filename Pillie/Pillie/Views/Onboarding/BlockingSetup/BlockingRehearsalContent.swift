@@ -41,7 +41,6 @@ struct BlockingRehearsalContent: Equatable {
     let picksBody: String
     let picksHeader: String
     let changePicks: String
-    let categoryCaption: String
     let pauseRowTitle: String
     let pauseRowBody: String
     let resumeRowTitle: String
@@ -170,7 +169,6 @@ struct BlockingRehearsalContent: Equatable {
             picksBody: BlockingRehearsalCopyKey.picksBody.string(locale: locale),
             picksHeader: BlockingRehearsalCopyKey.picksHeader.string(locale: locale),
             changePicks: BlockingRehearsalCopyKey.picksChange.string(locale: locale),
-            categoryCaption: BlockingRehearsalCopyKey.picksCategoryCaption.string(locale: locale),
             pauseRowTitle: reminderClock,
             pauseRowBody: BlockingRehearsalCopyKey.picksPauseBody.string(locale: locale),
             resumeRowTitle: BlockingRehearsalCopyKey.picksResumeTitle.string(locale: locale),
@@ -272,7 +270,6 @@ enum BlockingRehearsalCopyKey: String, CaseIterable {
     case picksBody = "onboarding.blocking_rehearsal.picks.body"
     case picksHeader = "onboarding.blocking_rehearsal.picks.header"
     case picksChange = "onboarding.blocking_rehearsal.picks.change"
-    case picksCategoryCaption = "onboarding.blocking_rehearsal.picks.category_caption"
     case picksPauseBody = "onboarding.blocking_rehearsal.picks.pause_body"
     case picksResumeTitle = "onboarding.blocking_rehearsal.picks.resume_title"
     case picksResumeBody = "onboarding.blocking_rehearsal.picks.resume_body"

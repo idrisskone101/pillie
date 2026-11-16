@@ -6,9 +6,7 @@
 //  Screen it draws, and what a pick tile may hold.
 //
 
-import FamilyControls
 import Foundation
-import ManagedSettings
 
 struct BlockingRehearsalScript: Equatable {
     let featuredApp: BlockingRehearsalApp
@@ -148,48 +146,4 @@ enum BlockingRehearsalIcon: Hashable {
     static let dock: [BlockingRehearsalIcon] = [
         .plain("phone.fill"), .plain("safari.fill"), .plain("envelope.fill"), .plain("headphones"),
     ]
-}
-
-/// One tile on the picks card.
-///
-/// A real pick carries an opaque FamilyControls token and nothing else. No
-/// case holds a `String`, so this type cannot carry an app name: iOS draws the
-/// name inside `Label(token)` and Pillie never sees it.
-enum BlockingRehearsalPick: Hashable {
-    case category(ActivityCategoryToken)
-    case application(ApplicationToken)
-    case webDomain(WebDomainToken)
-    #if DEBUG
-    /// The simulator cannot hand out tokens, so QA draws stand-in tiles.
-    case sample(BlockingRehearsalSamplePick)
-    #endif
-
-    /// Categories, then apps, then websites. Order inside a group is the set's own.
-    static func picks(in selection: FamilyActivitySelection) -> [BlockingRehearsalPick] {
-        selection.categoryTokens.map(BlockingRehearsalPick.category)
-            + selection.applicationTokens.map(BlockingRehearsalPick.application)
-            + selection.webDomainTokens.map(BlockingRehearsalPick.webDomain)
-    }
-}
-
-struct BlockingRehearsalPickGrid: Equatable {
-    enum Tile: Hashable {
-        case pick(BlockingRehearsalPick)
-        case more(Int)
-    }
-
-    static let columns = 4
-    static let capacity = 8
-
-    let rows: [[Tile]]
-
-    init(picks: [BlockingRehearsalPick]) {
-        var tiles = picks.prefix(Self.capacity).map(Tile.pick)
-        if picks.count > Self.capacity {
-            tiles[Self.capacity - 1] = .more(picks.count - (Self.capacity - 1))
-        }
-        rows = stride(from: 0, to: tiles.count, by: Self.columns).map {
-            Array(tiles[$0..<min($0 + Self.columns, tiles.count)])
-        }
-    }
 }

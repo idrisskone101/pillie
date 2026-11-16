@@ -165,7 +165,6 @@ struct BlockingRehearsalContentTests {
     @Test func `The picks card keeps the shipped privacy line`() {
         #expect(content.picksHeader == "Your picks")
         #expect(content.changePicks == "Change")
-        #expect(content.categoryCaption == "All apps")
         #expect(
             content.privacyLine
                 == "Pillie only sees how many you picked. The apps themselves stay private on this device."

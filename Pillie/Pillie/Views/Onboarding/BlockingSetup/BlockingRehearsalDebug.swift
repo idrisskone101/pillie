@@ -6,7 +6,7 @@
 //
 //    pillie://debug/plus-app-blocking-setup
 //        ?stage=reminder|paused|shake|ask|refused|picks
-//        &selected=N                  N sample tiles on the picks card (implies stage=picks)
+//        &selected=N                  a stand-in selection of N picks (implies stage=picks)
 //        &reason=cancelled|conflict   which refusal the refused stage shows
 //        &featured=tiktok|instagram|youtube|messages
 //        &access=notAsked             draw the stage as before Apple's prompt (the simulator is always allowed)
@@ -29,7 +29,7 @@ struct BlockingRehearsalDebugSeed: Equatable {
     /// The simulator always reports Screen Time as allowed. This draws the
     /// stage as a first-time user sees it, until the next request "allows" it.
     let accessNotAsked: Bool
-    let sampleTileCount: Int
+    let stubSelectionCount: Int
 
     init?(link: String) {
         guard let components = URLComponents(string: link) else { return nil }
@@ -51,7 +51,7 @@ struct BlockingRehearsalDebugSeed: Equatable {
         refusal = value("reason").flatMap(ScreenTimeRefusal.init(rawValue:)) ?? .notAllowed
         featuredApp = value("featured").flatMap(BlockingRehearsalApp.init(rawValue:))
         accessNotAsked = value("access") == "notAsked"
-        sampleTileCount = stage == .picks ? (selected > 0 ? selected : 4) : 0
+        stubSelectionCount = stage == .picks ? (selected > 0 ? selected : 4) : 0
     }
 
     static func arm(with url: URL, defaults: UserDefaults = .standard) {
@@ -60,7 +60,7 @@ struct BlockingRehearsalDebugSeed: Equatable {
         defaults.set("\(url.absoluteString)#\(UUID().uuidString)", forKey: storageKey)
 
         let manager = AppBlockingManager.shared
-        manager.debugSelectionCountOverride = seed.sampleTileCount > 0 ? seed.sampleTileCount : nil
+        manager.debugSelectionCountOverride = seed.stubSelectionCount > 0 ? seed.stubSelectionCount : nil
         if seed.stage == .refused {
             manager.debugSimulatorRefusal = seed.refusal
             manager.updateAuthorizationStatus()
@@ -68,46 +68,4 @@ struct BlockingRehearsalDebugSeed: Equatable {
     }
 }
 
-/// A tile that stands in for a FamilyControls token on the simulator.
-struct BlockingRehearsalSamplePick: Hashable {
-    enum Kind: Hashable {
-        case category(symbol: String)
-        case application(BlockingRehearsalIcon)
-        case webDomain
-
-        fileprivate var group: Int {
-            switch self {
-            case .category: 0
-            case .application: 1
-            case .webDomain: 2
-            }
-        }
-    }
-
-    let kind: Kind
-    /// English and never localized: it stands in for a name iOS would draw.
-    let name: String
-
-    private static let cycle: [BlockingRehearsalSamplePick] = [
-        BlockingRehearsalSamplePick(kind: .category(symbol: "bubble.left.fill"), name: "Social"),
-        BlockingRehearsalSamplePick(kind: .category(symbol: "gamecontroller.fill"), name: "Games"),
-        BlockingRehearsalSamplePick(kind: .application(BlockingRehearsalApp.youtube.icon), name: "YouTube"),
-        BlockingRehearsalSamplePick(kind: .webDomain, name: "reddit.com"),
-        BlockingRehearsalSamplePick(kind: .application(BlockingRehearsalApp.tiktok.icon), name: "TikTok"),
-        BlockingRehearsalSamplePick(kind: .application(BlockingRehearsalApp.instagram.icon), name: "Instagram"),
-        BlockingRehearsalSamplePick(kind: .application(BlockingRehearsalApp.messages.icon), name: "Messages"),
-        BlockingRehearsalSamplePick(kind: .webDomain, name: "news.example.com"),
-    ]
-
-    static func tiles(count: Int) -> [BlockingRehearsalPick] {
-        let samples = (0..<max(count, 0)).map { index in
-            let base = cycle[index % cycle.count]
-            let lap = index / cycle.count
-            return lap == 0 ? base : BlockingRehearsalSamplePick(kind: base.kind, name: "\(base.name) \(lap + 1)")
-        }
-        return [0, 1, 2].flatMap { group in
-            samples.filter { $0.kind.group == group }.map(BlockingRehearsalPick.sample)
-        }
-    }
-}
 #endif

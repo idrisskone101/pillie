@@ -30,12 +30,12 @@ struct BlockingRehearsalDebugSeedTests {
         #expect(seed("stage=nonsense")?.stage == .ask)
     }
 
-    @Test func `A selection count means the picks with that many sample tiles`() {
+    @Test func `A selection count opens the picks with a stand-in selection that size`() {
         #expect(seed("selected=8")?.stage == .picks)
-        #expect(seed("selected=8")?.sampleTileCount == 8)
-        #expect(seed("stage=picks")?.sampleTileCount == 4)
+        #expect(seed("selected=8")?.stubSelectionCount == 8)
+        #expect(seed("stage=picks")?.stubSelectionCount == 4)
         #expect(seed("selected=0")?.stage == .ask)
-        #expect(seed("stage=ask&selected=3")?.sampleTileCount == 0)
+        #expect(seed("stage=ask&selected=3")?.stubSelectionCount == 0)
     }
 
     @Test func `The refused stage shows either reason`() {
