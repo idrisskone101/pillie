@@ -47,8 +47,22 @@ struct BlockingRehearsalState: Equatable {
         position == .shake(.popping) || position == .shake(.popped)
     }
 
+    /// Where her check-in stands on the shake beat. Counted the way Today
+    /// counts it: one shake per step of her method's clip.
+    var shakeProgress: ShakeProgress? {
+        switch position {
+        case .shake(.shaking(let shakes)): ShakeProgress(shakes: shakes, total: shakesToCheckIn)
+        case .shake(.popping), .shake(.popped): ShakeProgress(shakes: shakesToCheckIn, total: shakesToCheckIn)
+        default: nil
+        }
+    }
+
+    /// The clip has played to the pop.
+    var shakeRevealed: Bool { position == .shake(.popped) }
+
     var listensForShake: Bool {
-        position == .shake(.waiting)
+        if case .shake(.shaking) = position { return true }
+        return false
     }
 
     /// The wait the view should run now. The view sleeps for its duration in a
@@ -58,7 +72,7 @@ struct BlockingRehearsalState: Equatable {
         case .reminder(.leaving): .appPressed
         case .paused(.leaving): .coralSpreads
         case .shake(.popped): .settleAfterPop
-        case .unopened, .reminder(.waiting), .paused(.waiting), .shake(.waiting), .shake(.popping),
+        case .unopened, .reminder(.waiting), .paused(.waiting), .shake(.shaking), .shake(.popping),
              .ask, .refused, .picks: nil
         }
     }
@@ -69,7 +83,9 @@ struct BlockingRehearsalState: Equatable {
     }
 
     private enum ShakePhase: Equatable {
-        case waiting
+        /// Shakes so far, fewer than her clip needs.
+        case shaking(Int)
+        /// Every shake is in and the clip plays to the pop.
         case popping
         case popped
     }
@@ -87,6 +103,7 @@ struct BlockingRehearsalState: Equatable {
     private var position: Position = .unopened
     private(set) var isAuthorized = false
     private var hasSelection = false
+    private var shakesToCheckIn = 1
 
     /// Total: every event is legal in every position. One that does not apply
     /// returns `[]` and changes nothing.
@@ -96,6 +113,7 @@ struct BlockingRehearsalState: Equatable {
             guard position == .unopened else { return [] }
             hasSelection = opening.hasSelection
             isAuthorized = opening.isAuthorized
+            shakesToCheckIn = max(1, opening.shakesToCheckIn)
             #if DEBUG
             if let seed = opening.debugSeed {
                 return jump(to: seed)
@@ -110,8 +128,10 @@ struct BlockingRehearsalState: Equatable {
             return play(by: .herTap)
 
         case .shaken:
-            guard position == .shake(.waiting) else { return [] }
-            return play(by: .herShake)
+            guard case .shake(.shaking(let shakes)) = position else { return [] }
+            guard shakes + 1 < shakesToCheckIn else { return play(by: .herShake) }
+            position = .shake(.shaking(shakes + 1))
+            return [.shakeLanded(ShakeProgress(shakes: shakes + 1, total: shakesToCheckIn))]
 
         case .greyedAppTapped:
             return position == .paused(.waiting) ? [.nudgePauseCard] : []
@@ -127,7 +147,7 @@ struct BlockingRehearsalState: Equatable {
             case .appPressed:
                 return enter(.paused(.waiting))
             case .coralSpreads:
-                return enter(.shake(.waiting))
+                return enter(.shake(.shaking(0)))
             case .settleAfterPop:
                 return [.persistDemoSeen] + enter(restingPosition)
             }
@@ -195,7 +215,7 @@ struct BlockingRehearsalState: Equatable {
         switch seed.stage {
         case .reminder: return enter(.reminder(.waiting))
         case .paused: return enter(.paused(.waiting))
-        case .shake: return enter(.shake(.waiting))
+        case .shake: return enter(.shake(.shaking(0)))
         case .ask: return enter(.ask(requesting: false))
         case .refused: return enter(.refused(seed.refusal, requesting: false))
         case .picks: return enter(.picks(requesting: false))
@@ -220,9 +240,14 @@ struct BlockingRehearsalState: Equatable {
         case .paused(.waiting):
             position = .paused(.leaving)
             return [.report(.played(.paused, by: player))]
-        case .shake(.waiting):
+        case .shake(.shaking):
+            // A tap fills the count at once, as "Tap to check in instead"
+            // does on Today, and lands like the last shake.
             position = .shake(.popping)
-            return [.report(.played(.shake, by: player))]
+            return [
+                .shakeLanded(ShakeProgress(shakes: shakesToCheckIn, total: shakesToCheckIn)),
+                .report(.played(.shake, by: player)),
+            ]
         default:
             return []
         }
@@ -293,6 +318,8 @@ struct BlockingRehearsalOpening: Equatable {
     var demoSeen: Bool
     var hasSelection: Bool
     var isAuthorized: Bool
+    /// How many shakes her method's clip takes to check in on Today.
+    var shakesToCheckIn = 1
     #if DEBUG
     var debugSeed: BlockingRehearsalDebugSeed?
     #endif
@@ -323,6 +350,8 @@ enum BlockingRehearsalEvent: Equatable {
 /// One-shot work for the view to carry out, in order.
 enum BlockingRehearsalEffect: Equatable {
     case nudgePauseCard
+    /// The same haptic Today plays for this shake.
+    case shakeLanded(ShakeProgress)
     case persistDemoSeen
     /// Ask Apple, then send the answer back as `.authorizationResolved`.
     case authorize

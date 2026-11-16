@@ -17,7 +17,9 @@ struct BlockingRehearsalView: View {
     @State private var state = BlockingRehearsalState()
     @State private var showPicker = false
     @State private var pauseCardNudges = 0
-    @State private var shakeDetector = ShakeDetectionManager(requiredShakes: 1)
+    /// Counts past any clip, so every shake reaches the state, which knows
+    /// when her check-in is done.
+    @State private var shakeDetector = ShakeDetectionManager(requiredShakes: .max)
     @State private var appeared = false
     @AppStorage(BlockingRehearsalView.demoSeenKey) private var demoSeen = false
     #if DEBUG
@@ -34,6 +36,7 @@ struct BlockingRehearsalView: View {
 
     private let telemetry = BlockingRehearsalTelemetry()
     private let actions = BlockingSetupActions()
+    private let shakeFeedback = ShakeConfirmationInteractionFeedback()
 
     static let demoSeenKey = "onboarding_blocking_rehearsal_seen"
 
@@ -83,7 +86,8 @@ struct BlockingRehearsalView: View {
         let opening = BlockingRehearsalOpening(
             demoSeen: demoSeen,
             hasSelection: blockingManager.selectionState.hasSelection,
-            isAuthorized: blockingManager.isAuthorized
+            isAuthorized: blockingManager.isAuthorized,
+            shakesToCheckIn: script.shakeClip.shakeCount
         )
         #if DEBUG
         var seeded = opening
@@ -127,7 +131,8 @@ struct BlockingRehearsalView: View {
                     BlockingRehearsalShakeBeat(
                         clip: script.shakeClip,
                         chrome: chrome(for: .shake, in: content),
-                        playsClip: state.playsShakeClip,
+                        progress: state.shakeProgress ?? ShakeProgress(shakes: 0, total: script.shakeClip.shakeCount),
+                        revealed: state.shakeRevealed,
                         onBack: onBack,
                         send: send
                     )
@@ -180,8 +185,8 @@ struct BlockingRehearsalView: View {
                 shakeDetector.stopDetecting()
             }
         }
-        .onChange(of: shakeDetector.shakeCount) { _, count in
-            if count > 0 { send(.shaken) }
+        .onChange(of: shakeDetector.shakeCount) { old, count in
+            if count > old { send(.shaken) }
         }
         .onChange(of: blockingManager.selectionState.hasSelection) { _, hasSelection in
             send(.selectionChanged(hasSelection: hasSelection))
@@ -415,6 +420,8 @@ struct BlockingRehearsalView: View {
 
     private func perform(_ effect: BlockingRehearsalEffect) {
         switch effect {
+        case .shakeLanded(let progress):
+            shakeFeedback.shakeLanded(on: progress, accessibilityReduceMotion: reduceMotion)
         case .nudgePauseCard:
             if !reduceMotion { pauseCardNudges += 1 }
             InteractionFeedback.live.perform(.lowRiskTap)

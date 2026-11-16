@@ -2,9 +2,10 @@
 # app.log (category analytics). `fresh` first, because blocker_setup_started and
 # blocker_setup_skipped fire once per install.
 #
-# Pass 1 plays the beats by hand from a seeded first beat. app.log must hold three
-# blocking_rehearsal_beat_played lines, the shake with shake_count=1 (a tap on
-# the stage stands in for a shake on the simulator).
+# Pass 1 plays the beats by hand from a seeded first beat, with the five shakes
+# the pill clip takes (a tap on the stage stands in for one shake on the
+# simulator). app.log must hold three blocking_rehearsal_beat_played lines, the
+# shake with shake_count=1.
 #
 # No beat plays itself; onboarding-walkthrough proves each one waits.
 #
@@ -29,6 +30,18 @@ tap --id blockingRehearsalFeaturedApp
 wait id blockingRehearsalOpenPillie 10
 tap --id blockingRehearsalOpenPillie
 wait id blockingRehearsalTapInstead 10
+# The pill clip checks in after five shakes, as on Today; each tap on the stage
+# is one shake, one clip step and one haptic.
+tap --id blockingRehearsalShakeBeat
+sleep 0.6
+tap --id blockingRehearsalShakeBeat
+sleep 0.6
+expect-not id blockingRehearsalCheckedInPill
+shot mid-shake
+tap --id blockingRehearsalShakeBeat
+sleep 0.6
+tap --id blockingRehearsalShakeBeat
+sleep 0.6
 tap --id blockingRehearsalShakeBeat
 wait id blockingRehearsalCheckedInPill 15
 sleep 1

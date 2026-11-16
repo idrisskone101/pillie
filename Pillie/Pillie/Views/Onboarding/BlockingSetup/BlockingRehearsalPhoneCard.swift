@@ -259,16 +259,21 @@ struct BlockingRehearsalPhoneCard: View {
         let isFeatured = app == script.featuredApp
         switch stage {
         case .reminder where isFeatured:
-            Button {
-                send(.beatControlTapped)
-            } label: {
-                iconTile(app.icon, label: name, halo: .invite, pressed: isLeaving)
+            // The hand sits beside the button, not on it, so its tapping loop
+            // never moves the button's frame (VoiceOver's box, a flow's target).
+            ZStack(alignment: .bottomTrailing) {
+                Button {
+                    send(.beatControlTapped)
+                } label: {
+                    iconTile(app.icon, label: name, halo: .invite, pressed: isLeaving)
+                }
+                .buttonStyle(.plain)
+                .disabled(isLeaving)
+                .accessibilityLabel(name)
+                .accessibilityIdentifier("blockingRehearsalFeaturedApp")
+
+                hand
             }
-            .buttonStyle(.plain)
-            .disabled(isLeaving)
-            .overlay(alignment: .bottomTrailing) { hand }
-            .accessibilityLabel(name)
-            .accessibilityIdentifier("blockingRehearsalFeaturedApp")
         case .paused:
             Button {
                 send(.greyedAppTapped)

@@ -2,8 +2,8 @@
 //  BlockingRehearsalShakeBeat.swift
 //  Pillie
 //
-//  What sits on the coral cover of the third beat: shake once, or tap, and her
-//  method's own clip plays through to the pop. The view that owns the cover
+//  What sits on the coral cover of the third beat: her method's own clip, one
+//  step per shake with Today's haptics, or a tap that plays it through. The view that owns the cover
 //  draws the coral, so it can spread and pull back on its own.
 //
 
@@ -12,7 +12,8 @@ import SwiftUI
 struct BlockingRehearsalShakeBeat: View {
     let clip: ShakeClip
     let chrome: BlockingRehearsalChrome
-    let playsClip: Bool
+    let progress: ShakeProgress
+    let revealed: Bool
     let onBack: () -> Void
     let send: (BlockingRehearsalEvent) -> Void
 
@@ -26,7 +27,7 @@ struct BlockingRehearsalShakeBeat: View {
     private static let plinthDiameter: CGFloat = 270
 
     private var rocks: Bool {
-        entered && !playsClip && !reduceMotion && !voiceOverEnabled
+        entered && progress.shakes == 0 && !reduceMotion && !voiceOverEnabled
     }
 
     var body: some View {
@@ -87,7 +88,7 @@ struct BlockingRehearsalShakeBeat: View {
                 1
             )
             ZStack {
-                Image(playsClip ? "ShakeHalftone3" : "ShakeHalftone0")
+                Image("ShakeHalftone\(progress.shown(revealed: revealed).halftoneIndex)")
                     .resizable()
                     .frame(width: Self.stageSize.width, height: Self.stageSize.height)
                     .transaction { $0.animation = nil }
@@ -100,11 +101,8 @@ struct BlockingRehearsalShakeBeat: View {
 
                     ShakeStopMotionStage(
                         clip: clip,
-                        shakes: playsClip ? clip.shakeCount : 0,
-                        onFinished: {
-                            InteractionFeedback.live.perform(.success)
-                            send(.shakeClipFinished)
-                        }
+                        shakes: progress.shakes,
+                        onFinished: { send(.shakeClipFinished) }
                     )
                     .rotationEffect(.degrees(rockAngle))
                 }
@@ -139,7 +137,7 @@ struct BlockingRehearsalShakeBeat: View {
                 }
             }
             .buttonStyle(.pillieDark)
-            .disabled(playsClip)
+            .disabled(progress.isDone)
             .accessibilityFocused($tapInsteadFocused)
             .accessibilityIdentifier("blockingRehearsalTapInstead")
         }

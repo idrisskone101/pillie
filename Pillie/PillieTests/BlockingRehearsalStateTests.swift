@@ -128,7 +128,10 @@ struct BlockingRehearsalStateTests {
         _ = state.handle(.timerFired(.appPressed))
         _ = state.handle(.beatControlTapped)
         _ = state.handle(.timerFired(.coralSpreads))
-        #expect(state.handle(.shaken) == [.report(.played(.shake, by: .herShake))])
+        #expect(state.handle(.shaken) == [
+            .shakeLanded(ShakeProgress(shakes: 1, total: 1)),
+            .report(.played(.shake, by: .herShake)),
+        ])
         #expect(state.playsShakeClip)
         #expect(!state.listensForShake)
         #expect(state.handle(.shaken) == [])
@@ -198,8 +201,52 @@ struct BlockingRehearsalStateTests {
         _ = state.handle(.timerFired(.appPressed))
         _ = state.handle(.beatControlTapped)
         _ = state.handle(.timerFired(.coralSpreads))
-        #expect(state.handle(.beatControlTapped) == [.report(.played(.shake, by: .herTap))])
+        #expect(state.handle(.beatControlTapped) == [
+            .shakeLanded(ShakeProgress(shakes: 1, total: 1)),
+            .report(.played(.shake, by: .herTap)),
+        ])
         #expect(state.playsShakeClip)
+    }
+
+    private func atShake(shakesToCheckIn: Int) -> BlockingRehearsalState {
+        var state = BlockingRehearsalState()
+        var opening = BlockingRehearsalOpening(demoSeen: false, hasSelection: false, isAuthorized: false)
+        opening.shakesToCheckIn = shakesToCheckIn
+        _ = state.handle(.appeared(opening))
+        _ = state.handle(.beatControlTapped)
+        _ = state.handle(.timerFired(.appPressed))
+        _ = state.handle(.beatControlTapped)
+        _ = state.handle(.timerFired(.coralSpreads))
+        return state
+    }
+
+    @Test func `Each shake lands with Today's haptic until her clip's count is in`() {
+        var state = atShake(shakesToCheckIn: 3)
+        #expect(state.shakeProgress == ShakeProgress(shakes: 0, total: 3))
+        #expect(state.handle(.shaken) == [.shakeLanded(ShakeProgress(shakes: 1, total: 3))])
+        #expect(state.listensForShake)
+        #expect(!state.playsShakeClip)
+        #expect(state.handle(.shaken) == [.shakeLanded(ShakeProgress(shakes: 2, total: 3))])
+        #expect(state.handle(.shaken) == [
+            .shakeLanded(ShakeProgress(shakes: 3, total: 3)),
+            .report(.played(.shake, by: .herShake)),
+        ])
+        #expect(state.playsShakeClip)
+        #expect(!state.listensForShake)
+        #expect(state.handle(.shaken) == [])
+    }
+
+    @Test func `Tapping instead mid-count fills it like the last shake`() {
+        var state = atShake(shakesToCheckIn: 4)
+        _ = state.handle(.shaken)
+        #expect(state.handle(.beatControlTapped) == [
+            .shakeLanded(ShakeProgress(shakes: 4, total: 4)),
+            .report(.played(.shake, by: .herTap)),
+        ])
+        #expect(state.shakeProgress == ShakeProgress(shakes: 4, total: 4))
+        #expect(!state.shakeRevealed)
+        _ = state.handle(.shakeClipFinished)
+        #expect(state.shakeRevealed)
     }
 
     @Test func `The ask never plays itself`() {

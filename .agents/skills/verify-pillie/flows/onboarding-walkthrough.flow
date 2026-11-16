@@ -147,6 +147,8 @@ wait id protectionPlanReadyStartButton
 shot protection-plan-ready
 tap --id protectionPlanReadyStartButton
 
-# Home — pill 12 logged from the step 7 answer, streak 1.
-wait text "Pill 12 of 28" 15
+# Home — the pill logged from the step 7 answer, streak 1. Its number moves
+# with the clock against the 8 AM reminder (12 before it, 13 after), so the
+# flow checks the pack, not the pill.
+wait text " of 28" 15
 shot home
