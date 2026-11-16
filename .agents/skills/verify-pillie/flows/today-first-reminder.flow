@@ -8,8 +8,6 @@ sleep 2
 openurl pillie://debug/fixed-now?at=2026-09-15T12:30:00Z
 wait id protectionPlanPrimaryCTA
 tap --id protectionPlanPrimaryCTA
-wait id protectionPlanEarlyValueProofView
-tap --label "Not now" --element-type Button
 wait text "What’s in the way?"
 tap --label TikTok
 tap --label "A simpler routine"
@@ -36,10 +34,10 @@ tap --id protectionPlanPrimaryCTA
 tap --label Allow
 wait id protectionPlanPrimaryCTA 15
 tap --id protectionPlanPrimaryCTA
-wait id appBlockingEmptyStateCard 15
+wait id blockingRehearsalBanner 15
 openurl "pillie://debug/plus-app-blocking-setup?selected=3&lang=en"
-wait text "Apps selected"
-tap --label Continue
+wait id blockingRehearsalChangePicks 15
+tap --id blockingRehearsalPrimary
 wait id protectionPlanReadyStartButton
 tap --id protectionPlanReadyStartButton
 sleep 2

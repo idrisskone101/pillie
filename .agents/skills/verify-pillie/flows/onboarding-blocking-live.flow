@@ -1,0 +1,71 @@
+# The blocking rehearsal played live, with the analytics mirror recorded in
+# app.log (category analytics). `fresh` first, because blocker_setup_started and
+# blocker_setup_skipped fire once per install.
+#
+# Pass 1 plays the beats by hand from a seeded first beat, with the five shakes
+# the pill clip takes (a tap on the stage stands in for one shake on the
+# simulator). app.log must hold three blocking_rehearsal_beat_played lines, the
+# shake with shake_count=5.
+#
+# No beat plays itself; onboarding-walkthrough proves each one waits.
+#
+# Pass 2 walks the refusal. The simulator approves Screen Time on its own, so
+# screen-time-refused forces Apple's "Don't Allow". app.log must hold
+# screen_time_permission_requested and _completed twice,
+# blocking_rehearsal_ask_again, blocking_rehearsal_reminders_only with
+# step=rehearsal_refused, and blocker_setup_skipped. "Use reminders only" then
+# finishes onboarding on Today.
+#
+# Pass 3 leaves from the ask once Screen Time is allowed: app.log must hold
+# blocking_rehearsal_reminders_only with step=rehearsal_ask.
+fresh
+launch
+sleep 6  # the splash fades and Welcome settles before the first deep link
+log start
+sleep 2
+
+openurl "pillie://debug/plus-app-blocking-setup?stage=reminder&terms=hard&lang=en"
+wait id blockingRehearsalFeaturedApp 15
+tap --id blockingRehearsalFeaturedApp
+wait id blockingRehearsalOpenPillie 10
+tap --id blockingRehearsalOpenPillie
+wait id blockingRehearsalTapInstead 10
+# The pill clip checks in after five shakes, as on Today; each tap on the stage
+# is one shake, one clip step and one haptic.
+tap --id blockingRehearsalShakeBeat
+sleep 0.6
+tap --id blockingRehearsalShakeBeat
+sleep 0.6
+expect-not id blockingRehearsalCheckedInPill
+shot mid-shake
+tap --id blockingRehearsalShakeBeat
+sleep 0.6
+tap --id blockingRehearsalShakeBeat
+sleep 0.6
+tap --id blockingRehearsalShakeBeat
+wait id blockingRehearsalCheckedInPill 15
+sleep 1
+shot by-hand-ask
+
+openurl "pillie://debug/screen-time-refused?reason=cancelled&lang=en"
+wait text "Apple asks for Screen Time access first" 10
+expect-not id blockingRehearsalRemindersOnly
+tap --id blockingRehearsalPrimary
+wait id blockingRehearsalPromptPreview 15
+shot refused
+tap --id blockingRehearsalPrimary
+wait id blockingRehearsalPromptPreview 15
+tap --id blockingRehearsalRemindersOnly
+wait text Today 20
+shot reminders-only-home
+
+openurl "pillie://debug/screen-time-refused?reason=none&lang=en"
+openurl "pillie://debug/plus-app-blocking-setup?stage=ask&terms=hard&lang=en"
+wait id blockingRehearsalRemindersOnly 15
+expect-not text "Apple asks for Screen Time access first"
+shot ask-after-allow
+tap --id blockingRehearsalRemindersOnly
+wait text Today 20
+
+sleep 1
+log stop

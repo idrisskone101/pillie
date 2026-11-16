@@ -285,6 +285,11 @@ struct PillieApp: App {
 
     init() {
         PillieFontRegistration.registerFontsIfNeeded()
+        #if DEBUG
+        // A seed from the last run's debug link must not steer this run's
+        // walk through onboarding.
+        UserDefaults.standard.removeObject(forKey: BlockingRehearsalDebugSeed.storageKey)
+        #endif
 
         if !Self.isRunningTests {
             Self.recordInstallCohortIfNeeded()
@@ -535,6 +540,7 @@ struct PillieApp: App {
         guard url.scheme == "pillie", url.host == "debug" else { return }
         applyDebugLanguage(from: url)
         applyDebugTrialDayRule(from: url)
+        BlockingRehearsalDebugSeed.arm(with: url)
         // After the link runs, so a grant the link writes takes the length.
         defer { applyDebugTrialLength(from: url) }
 
@@ -576,27 +582,6 @@ struct PillieApp: App {
                 SubscriptionManager.shared.setPlusForTesting(true)
             }
             UserDefaults.standard.set(false, forKey: OnboardingFlow.selectedFreePlanStorageKey)
-            UserDefaults.standard.set(
-                false,
-                forKey: "pillie_debug_app_blocking_authorization_recovery"
-            )
-            let selectedCount = queryItems?
-                .first(where: { $0.name == "selected" })?.value
-                .flatMap(Int.init)
-            AppBlockingManager.shared.debugSelectionCountOverride =
-                (selectedCount ?? 0) > 0 ? selectedCount : nil
-            UserDefaults.standard.set(OnboardingFlow.Step.appBlocking.rawValue, forKey: OnboardingFlow.stepStorageKey)
-        case "/plus-app-blocking-recovery":
-            // Simulator FamilyControls authorization auto-approves. This QA-only
-            // route renders the same recovery state a real denied/cancelled request
-            // reaches, without changing persisted selection or authorization.
-            SubscriptionManager.shared.setPlusForTesting(true)
-            AppBlockingManager.shared.debugSelectionCountOverride = nil
-            UserDefaults.standard.set(false, forKey: OnboardingFlow.selectedFreePlanStorageKey)
-            UserDefaults.standard.set(
-                true,
-                forKey: "pillie_debug_app_blocking_authorization_recovery"
-            )
             UserDefaults.standard.set(OnboardingFlow.Step.appBlocking.rawValue, forKey: OnboardingFlow.stepStorageKey)
         case "/screen-time-refused":
             // QA control (ENG-166): make simulator Screen Time authorization fail

@@ -127,16 +127,8 @@ struct ProductAnalyticsTelemetry {
     track(.onboardingStepCompleted, source: .onboarding, step: .delayConsequence)
   }
 
-  /// The Early Value Proof shake check-in resolved (#175). `shakeCount` is the
-  /// number of real shakes performed before resolution (0–3) — the CTA tap is a
-  /// fallback (no CoreMotion on simulator, not everyone can shake), so a low
-  /// count with a resolution means the fallback was used.
-  func demoShakeCompleted(shakeCount: Int) {
-    track(.demoShakeCompleted, source: .onboarding, step: .demoShake, shakeCount: shakeCount)
-  }
-
-  func demoSkipped() {
-    track(.demoSkipped, source: .onboarding, step: .demoDrag)
+  func blockingRehearsal(_ event: AnalyticsEvent, step: AnalyticsStep, shakeCount: Int? = nil) {
+    track(event, source: .onboarding, step: step, shakeCount: shakeCount)
   }
 
   func notificationPermissionRequested() {

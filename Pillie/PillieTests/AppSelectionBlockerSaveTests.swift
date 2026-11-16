@@ -101,6 +101,24 @@ final class AppSelectionBlockerSaveTests: XCTestCase {
         XCTAssertEqual(state.countText, "2")
     }
 
+    #if DEBUG
+    func testSimulatorSelectionOverrideFeedsTheCountAndHasAppsSelected() {
+        let manager = AppBlockingManager.shared
+        let previousOverride = manager.debugSelectionCountOverride
+        let previousConfigured = manager.debugBlockerConfiguredOverride
+        defer {
+            manager.debugSelectionCountOverride = previousOverride
+            manager.debugBlockerConfiguredOverride = previousConfigured
+        }
+        manager.debugBlockerConfiguredOverride = nil
+        manager.debugSelectionCountOverride = 4
+
+        XCTAssertEqual(manager.selectionState.selectedCount, 4)
+        XCTAssertTrue(manager.hasAppsSelected)
+        XCTAssertEqual(manager.selectedCount, 4)
+    }
+    #endif
+
     // MARK: - Privacy-safe, count-only summary (AC5)
 
     func testSummaryIsGenericCountOnly() {

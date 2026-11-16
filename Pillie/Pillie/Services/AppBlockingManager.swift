@@ -47,9 +47,9 @@ final class AppBlockingManager {
     /// Set via `pillie://debug/screen-time-unasked`.
     var debugSimulatorNeverAsked = false
 
-    /// QA seam: the onboarding selected-apps card reads token counts, which
-    /// FamilyControls cannot fabricate on the simulator. Set via
-    /// `pillie://debug/plus-app-blocking-setup?selected=4`.
+    /// QA seam: the simulator cannot pick FamilyControls tokens, so this stands
+    /// in for a selection of that many. The onboarding picks card draws that
+    /// many sample tiles. Set via `pillie://debug/plus-app-blocking-setup?selected=4`.
     var debugSelectionCountOverride: Int?
     #endif
 

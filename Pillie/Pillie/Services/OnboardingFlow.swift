@@ -308,6 +308,13 @@ enum OnboardingFlow {
             return .painPoints
         }
 
+        // Only a build older than the intro shell can have persisted the two
+        // legacy demo steps. Their screens are gone, so they resume on the first
+        // question too.
+        if step == .productDemo || step == .plusBlockingDemo {
+            return .painPoints
+        }
+
         // The former standalone outcome and risk-window questions are now sections
         // of the two consolidated personalization screens. Resume forward so a
         // partially completed onboarding never repeats an earlier question.

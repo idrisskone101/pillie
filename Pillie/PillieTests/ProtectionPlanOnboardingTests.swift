@@ -31,97 +31,66 @@ final class ProtectionPlanOnboardingTests: XCTestCase {
 
     // MARK: - Step routing
 
-    func testWelcomeIsFirstStepAndProofFollowsImmediately() {
-        // Analytics Consent was retired, so Welcome leads straight to the Early
-        // Value Proof (analytics is collected for everyone, no consent screen).
-        XCTAssertEqual(ProtectionPlanStep.first, .welcome)
-        XCTAssertEqual(ProtectionPlanStep.welcome.next, .earlyValueProof)
-    }
-
     func testNewStateStartsAtWelcomeWithNoBackNavigation() {
         let state = ProtectionPlanOnboardingState()
         XCTAssertEqual(state.currentStep, .welcome)
         XCTAssertFalse(state.canGoBack)
+        XCTAssertFalse(state.hasFinishedIntro)
     }
 
-    // MARK: - Forward / back navigation
-
-    func testAdvanceMovesFromWelcomeToTheProof() {
+    func testAdvanceMovesFromWelcomeToTheHandoff() {
         var state = ProtectionPlanOnboardingState()
         state.advance()
-        XCTAssertEqual(state.currentStep, .earlyValueProof)
-        XCTAssertTrue(state.canGoBack)
+        XCTAssertEqual(state.currentStep, .reviewPrompt)
+        XCTAssertTrue(state.hasFinishedIntro)
     }
 
-    func testGoBackFromProofReturnsToWelcome() {
-        var state = ProtectionPlanOnboardingState()
-        state.advance() // -> earlyValueProof
+    func testGoBackFromTheHandoffReturnsToWelcomeAndReentersTheShell() {
+        var state = ProtectionPlanOnboardingState(currentStep: .reviewPrompt)
         state.goBack()
         XCTAssertEqual(state.currentStep, .welcome)
-    }
-
-    // MARK: - Early Value Proof routing (#74)
-
-    func testEarlyValueProofAppearsAfterWelcomeAndBeforeHandoff() {
-        var state = ProtectionPlanOnboardingState()
-        state.advance() // welcome -> earlyValueProof
-
-        XCTAssertEqual(state.currentStep, .earlyValueProof)
-        XCTAssertFalse(
-            state.hasFinishedIntro,
-            "The Early Value Proof is still rendered by the new shell, so the flow must not hand off to the legacy questions yet."
-        )
-    }
-
-    func testIntroHandsOffOnceTheProofAdvancesToTheReviewPrompt() {
-        var state = ProtectionPlanOnboardingState()
-        state.advance() // -> earlyValueProof
         XCTAssertFalse(state.hasFinishedIntro)
-        state.advance() // -> reviewPrompt (handoff sentinel into the questions flow)
-
-        XCTAssertEqual(state.currentStep, .reviewPrompt)
-        XCTAssertTrue(
-            state.hasFinishedIntro,
-            "Reaching the handoff sentinel hands off to the questions flow."
-        )
-    }
-
-    func testGoBackFromHandoffSentinelReturnsToTheProofAndReentersTheShell() {
-        // Backing out of the first question reverses the intro handoff. Stepping back
-        // from the sentinel must land on the Early Value Proof and report the intro
-        // as unfinished, so the shell re-renders the proof instead of immediately
-        // re-triggering the handoff (which would bounce the user forward).
-        var state = ProtectionPlanOnboardingState(currentStep: .reviewPrompt)
-        XCTAssertTrue(state.hasFinishedIntro)
-
-        state.goBack()
-        XCTAssertEqual(state.currentStep, .earlyValueProof)
-        XCTAssertFalse(
-            state.hasFinishedIntro,
-            "Returning to the proof must re-enter the new shell, not re-fire the handoff."
-        )
     }
 
     // MARK: - Persistence / interruption
 
     func testCommittedStateSurvivesAppInterruption() {
         var state = ProtectionPlanOnboardingState()
-        state.advance() // -> earlyValueProof
+        state.advance()
+        state.recordDistractionChoices([.instagram])
         ProtectionPlanOnboardingStore.save(state, to: defaults)
 
-        // Simulate the app being killed and relaunched.
         let resumed = ProtectionPlanOnboardingStore.load(from: defaults)
-        XCTAssertEqual(resumed.currentStep, .earlyValueProof)
+        XCTAssertEqual(resumed.currentStep, .reviewPrompt)
+        XCTAssertEqual(resumed.distractionChoices, [.instagram])
     }
 
-    func testPersistedAnalyticsConsentStepMigratesForwardToProofOnLoad() {
-        // Analytics Consent was retired; a user persisted on the old consent step
-        // resumes on the Early Value Proof rather than the removed screen.
-        let state = ProtectionPlanOnboardingState(currentStep: .analyticsConsent)
-        ProtectionPlanOnboardingStore.save(state, to: defaults)
+    func testPersistedAnalyticsConsentStepLoadsOnTheHandoff() {
+        defaults.set(1, forKey: ProtectionPlanOnboardingStore.Keys.step)
 
         let resumed = ProtectionPlanOnboardingStore.load(from: defaults)
-        XCTAssertEqual(resumed.currentStep, .earlyValueProof)
+        XCTAssertEqual(resumed.currentStep, .reviewPrompt)
+        XCTAssertTrue(resumed.hasFinishedIntro)
+    }
+
+    func testUserParkedOnTheRetiredDemoLoadsOnTheHandoffWithHerAnswers() {
+        defaults.set(2, forKey: ProtectionPlanOnboardingStore.Keys.step)
+        defaults.set(["instagram"], forKey: ProtectionPlanOnboardingStore.Keys.distractionChoices)
+
+        let resumed = ProtectionPlanOnboardingStore.load(from: defaults)
+        XCTAssertEqual(resumed.currentStep, .reviewPrompt)
+        XCTAssertTrue(resumed.hasFinishedIntro)
+        XCTAssertEqual(resumed.distractionChoices, [.instagram])
+    }
+
+    func testRetiredDemoMigrationIsStableAcrossSaveAndLoad() {
+        defaults.set(2, forKey: ProtectionPlanOnboardingStore.Keys.step)
+
+        let migrated = ProtectionPlanOnboardingStore.load(from: defaults)
+        ProtectionPlanOnboardingStore.save(migrated, to: defaults)
+
+        XCTAssertEqual(defaults.integer(forKey: ProtectionPlanOnboardingStore.Keys.step), 3)
+        XCTAssertEqual(ProtectionPlanOnboardingStore.load(from: defaults).currentStep, .reviewPrompt)
     }
 
     func testFreshDefaultsLoadToWelcome() {
