@@ -43,6 +43,9 @@ struct BlockingRehearsalPhoneCard: View {
     @State private var haloBreathes = false
     @State private var openPillieBreathes = false
 
+    /// The hand taps the featured app on a loop until she does it herself.
+    private var tapCueRuns: Bool { showsHand && !isLeaving && !reduceMotion }
+
     var body: some View {
         GeometryReader { proxy in
             ZStack(alignment: .bottom) {
@@ -112,7 +115,7 @@ struct BlockingRehearsalPhoneCard: View {
                     haloBreathes = true
                 }
             }
-            try await Task.sleep(for: .milliseconds(1400))
+            try await Task.sleep(for: .milliseconds(900))
             withAnimation(.easeOut(duration: 0.3)) { showsHand = true }
         } catch {
             return
@@ -270,6 +273,19 @@ struct BlockingRehearsalPhoneCard: View {
     ) -> some View {
         VStack(spacing: 6) {
             iconImage(icon, side: Metrics.icon, radius: 14)
+                .keyframeAnimator(initialValue: 1.0, repeating: halo == .invite && tapCueRuns) { icon, scale in
+                    icon.scaleEffect(scale)
+                } keyframes: { _ in
+                    // Dips the moment the fingertip lands.
+                    KeyframeTrack {
+                        LinearKeyframe(1, duration: TapCue.press)
+                        LinearKeyframe(0.92, duration: 0.1)
+                        SpringKeyframe(1, duration: TapCue.cycle - TapCue.press - 0.1)
+                    }
+                }
+                .overlay {
+                    if halo == .invite { tapRipple }
+                }
                 .grayscale(dimmed ? 1 : 0)
                 .opacity(dimmed ? 0.38 : 1)
                 .scaleEffect(pressed ? 0.92 : 1)
@@ -322,6 +338,28 @@ struct BlockingRehearsalPhoneCard: View {
         }
     }
 
+    private var tapRipple: some View {
+        RoundedRectangle(cornerRadius: 14, style: .continuous)
+            .stroke(PillieTheme.coral, lineWidth: 3)
+            .keyframeAnimator(initialValue: RipplePose(), repeating: tapCueRuns) { ring, pose in
+                ring.scaleEffect(pose.scale).opacity(pose.opacity)
+            } keyframes: { _ in
+                KeyframeTrack(\.scale) {
+                    LinearKeyframe(1, duration: TapCue.press)
+                    LinearKeyframe(1.5, duration: 0.6, timingCurve: .easeOut)
+                    LinearKeyframe(1, duration: TapCue.cycle - TapCue.press - 0.6)
+                }
+                KeyframeTrack(\.opacity) {
+                    LinearKeyframe(0, duration: TapCue.press)
+                    LinearKeyframe(0.9, duration: 0.02)
+                    LinearKeyframe(0, duration: 0.58, timingCurve: .easeOut)
+                    LinearKeyframe(0, duration: TapCue.cycle - TapCue.press - 0.6)
+                }
+            }
+            .allowsHitTesting(false)
+            .accessibilityHidden(true)
+    }
+
     private var hand: some View {
         ZStack {
             Image(systemName: "hand.point.up.left.fill")
@@ -329,11 +367,27 @@ struct BlockingRehearsalPhoneCard: View {
             Image(systemName: "hand.point.up.left")
                 .foregroundStyle(PillieTheme.textPrimary)
         }
-        .font(.system(size: 28, weight: .medium))
-        .frame(width: 34, height: 34)
+        .font(.system(size: 34, weight: .medium))
+        .frame(width: 40, height: 40)
+        .keyframeAnimator(initialValue: HandPose(), repeating: tapCueRuns) { hand, pose in
+            hand.scaleEffect(pose.scale, anchor: .topLeading).offset(pose.offset)
+        } keyframes: { _ in
+            // Reaches in, presses, and lifts back out, once per cycle.
+            KeyframeTrack(\.offset) {
+                LinearKeyframe(.zero, duration: 0.35)
+                SpringKeyframe(CGSize(width: -10, height: -12), duration: TapCue.press - 0.35)
+                LinearKeyframe(CGSize(width: -10, height: -12), duration: 0.3)
+                SpringKeyframe(.zero, duration: TapCue.cycle - TapCue.press - 0.3)
+            }
+            KeyframeTrack(\.scale) {
+                LinearKeyframe(1, duration: TapCue.press)
+                LinearKeyframe(0.82, duration: 0.1)
+                SpringKeyframe(1, duration: TapCue.cycle - TapCue.press - 0.1)
+            }
+        }
         .flipsForRightToLeftLayoutDirection(true)
-        .padding(.trailing, -16)
-        .padding(.bottom, 18)
+        .padding(.trailing, -20)
+        .padding(.bottom, 14)
         .opacity(showsHand ? 1 : 0)
         .allowsHitTesting(false)
         .accessibilityHidden(true)
@@ -453,6 +507,22 @@ struct BlockingRehearsalPhoneCard: View {
         static let heightForSecondRow: CGFloat = 364
         static let heightForRowAbovePauseCard: CGFloat = 486
     }
+}
+
+private enum TapCue {
+    static let cycle: TimeInterval = 1.6
+    /// When the fingertip lands, from the start of a cycle.
+    static let press: TimeInterval = 0.75
+}
+
+private struct HandPose {
+    var offset = CGSize.zero
+    var scale: CGFloat = 1
+}
+
+private struct RipplePose {
+    var scale: CGFloat = 1
+    var opacity: Double = 0
 }
 
 private struct FeaturedIconBounds: PreferenceKey {
