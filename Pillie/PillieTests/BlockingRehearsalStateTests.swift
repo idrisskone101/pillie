@@ -130,7 +130,7 @@ struct BlockingRehearsalStateTests {
         _ = state.handle(.timerFired(.coralSpreads))
         #expect(state.handle(.shaken) == [
             .shakeLanded(ShakeProgress(shakes: 1, total: 1)),
-            .report(.played(.shake, by: .herShake)),
+            .report(.played(.shake, by: .herShake, shakes: 1)),
         ])
         #expect(state.playsShakeClip)
         #expect(!state.listensForShake)
@@ -203,7 +203,7 @@ struct BlockingRehearsalStateTests {
         _ = state.handle(.timerFired(.coralSpreads))
         #expect(state.handle(.beatControlTapped) == [
             .shakeLanded(ShakeProgress(shakes: 1, total: 1)),
-            .report(.played(.shake, by: .herTap)),
+            .report(.played(.shake, by: .herTap, shakes: 0)),
         ])
         #expect(state.playsShakeClip)
     }
@@ -229,7 +229,7 @@ struct BlockingRehearsalStateTests {
         #expect(state.handle(.shaken) == [.shakeLanded(ShakeProgress(shakes: 2, total: 3))])
         #expect(state.handle(.shaken) == [
             .shakeLanded(ShakeProgress(shakes: 3, total: 3)),
-            .report(.played(.shake, by: .herShake)),
+            .report(.played(.shake, by: .herShake, shakes: 3)),
         ])
         #expect(state.playsShakeClip)
         #expect(!state.listensForShake)
@@ -241,7 +241,7 @@ struct BlockingRehearsalStateTests {
         _ = state.handle(.shaken)
         #expect(state.handle(.beatControlTapped) == [
             .shakeLanded(ShakeProgress(shakes: 4, total: 4)),
-            .report(.played(.shake, by: .herTap)),
+            .report(.played(.shake, by: .herTap, shakes: 1)),
         ])
         #expect(state.shakeProgress == ShakeProgress(shakes: 4, total: 4))
         #expect(!state.shakeRevealed)

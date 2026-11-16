@@ -5,7 +5,7 @@
 # Pass 1 plays the beats by hand from a seeded first beat, with the five shakes
 # the pill clip takes (a tap on the stage stands in for one shake on the
 # simulator). app.log must hold three blocking_rehearsal_beat_played lines, the
-# shake with shake_count=1.
+# shake with shake_count=5.
 #
 # No beat plays itself; onboarding-walkthrough proves each one waits.
 #

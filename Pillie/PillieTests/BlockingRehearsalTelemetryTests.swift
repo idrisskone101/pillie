@@ -48,11 +48,16 @@ struct BlockingRehearsalTelemetryTests {
         )
     }
 
-    @Test func `The shake beat says whether she shook or tapped`() {
+    @Test func `The shake beat counts the real shakes behind it`() {
         #expect(
-            recorded(.played(.shake, by: .herShake), .played(.shake, by: .herTap))
+            recorded(
+                .played(.shake, by: .herShake, shakes: 5),
+                .played(.shake, by: .herTap, shakes: 2),
+                .played(.shake, by: .herTap, shakes: 0)
+            )
                 == [
-                    event(.blockingRehearsalBeatPlayed, step: .rehearsalShake, shakeCount: 1),
+                    event(.blockingRehearsalBeatPlayed, step: .rehearsalShake, shakeCount: 5),
+                    event(.blockingRehearsalBeatPlayed, step: .rehearsalShake, shakeCount: 2),
                     event(.blockingRehearsalBeatPlayed, step: .rehearsalShake, shakeCount: 0),
                 ]
         )

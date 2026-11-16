@@ -21,13 +21,9 @@ struct BlockingRehearsalTelemetry {
         switch signal {
         case .viewed(let stage):
             telemetry.blockingRehearsal(.blockingRehearsalStageViewed, step: stage.analyticsStep)
-        case .played(.shake, by: let player):
-            telemetry.blockingRehearsal(
-                .blockingRehearsalBeatPlayed,
-                step: .rehearsalShake,
-                shakeCount: player == .herShake ? 1 : 0
-            )
-        case .played(let beat, by: _):
+        case .played(.shake, by: _, shakes: let shakes):
+            telemetry.blockingRehearsal(.blockingRehearsalBeatPlayed, step: .rehearsalShake, shakeCount: shakes)
+        case .played(let beat, by: _, shakes: _):
             telemetry.blockingRehearsal(.blockingRehearsalBeatPlayed, step: beat.analyticsStep)
         case .askedAgain:
             telemetry.blockingRehearsal(.blockingRehearsalAskAgain, step: .rehearsalRefused)

@@ -240,13 +240,14 @@ struct BlockingRehearsalState: Equatable {
         case .paused(.waiting):
             position = .paused(.leaving)
             return [.report(.played(.paused, by: player))]
-        case .shake(.shaking):
+        case .shake(.shaking(let shaken)):
             // A tap fills the count at once, as "Tap to check in instead"
             // does on Today, and lands like the last shake.
             position = .shake(.popping)
+            let realShakes = player == .herShake ? shaken + 1 : shaken
             return [
                 .shakeLanded(ShakeProgress(shakes: shakesToCheckIn, total: shakesToCheckIn)),
-                .report(.played(.shake, by: player)),
+                .report(.played(.shake, by: player, shakes: realShakes)),
             ]
         default:
             return []
@@ -363,7 +364,9 @@ enum BlockingRehearsalEffect: Equatable {
 
 enum BlockingRehearsalSignal: Equatable {
     case viewed(BlockingRehearsalStage)
-    case played(BlockingRehearsalBeat, by: BlockingRehearsalPlayer)
+    /// `shakes` counts the real shakes behind the shake beat, so a tap after
+    /// two shakes reports 2.
+    case played(BlockingRehearsalBeat, by: BlockingRehearsalPlayer, shakes: Int = 0)
     case askedAgain
     case choseRemindersOnly(on: BlockingRehearsalStage)
 }
