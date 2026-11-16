@@ -338,14 +338,16 @@ struct BlockingRehearsalPhoneCard: View {
 
     @ViewBuilder
     private func haloView(_ halo: Halo?) -> some View {
-        let shape = RoundedRectangle(cornerRadius: 30, style: .continuous)
+        // Hugs the icon: the label sits 6 pt below it, so the halo (even at
+        // the top of its breath) has to stay inside that gap.
+        let shape = RoundedRectangle(cornerRadius: 19, style: .continuous)
         switch halo {
         case .invite:
             shape
                 .fill(PillieTheme.coral.opacity(0.25))
                 .overlay { shape.strokeBorder(PillieTheme.coral, lineWidth: 3) }
-                .frame(width: 88, height: 88)
-                .scaleEffect(haloBreathes && !isLeaving ? 1.06 : 1)
+                .frame(width: Metrics.halo, height: Metrics.halo)
+                .scaleEffect(haloBreathes && !isLeaving ? 1.04 : 1)
                 .opacity(bannerLanded && !isLeaving ? 1 : 0)
                 .animation(.easeOut(duration: 0.2), value: isLeaving)
         case .checkedIn:
@@ -357,7 +359,7 @@ struct BlockingRehearsalPhoneCard: View {
                         .trim(from: 0, to: isLive || reduceMotion ? 1 : 0)
                         .stroke(PillieTheme.verifiedGreen, lineWidth: 3)
                 }
-                .frame(width: 88, height: 88)
+                .frame(width: Metrics.halo, height: Metrics.halo)
                 .opacity(isLive ? 1 : 0)
                 .animation(.easeOut(duration: 0.4), value: isLive)
         case nil:
@@ -373,7 +375,7 @@ struct BlockingRehearsalPhoneCard: View {
             } keyframes: { _ in
                 KeyframeTrack(\.scale) {
                     LinearKeyframe(1, duration: TapCue.press)
-                    LinearKeyframe(1.5, duration: 0.6, timingCurve: .easeOut)
+                    LinearKeyframe(1.25, duration: 0.6, timingCurve: .easeOut)
                     LinearKeyframe(1, duration: TapCue.cycle - TapCue.press - 0.6)
                 }
                 KeyframeTrack(\.opacity) {
@@ -528,6 +530,7 @@ struct BlockingRehearsalPhoneCard: View {
         static let bottomInset: CGFloat = 18
         static let rowSpacing: CGFloat = 22
         static let icon: CGFloat = 62
+        static let halo: CGFloat = 72
         /// Below these card heights the banner, two rows and the dock no
         /// longer fit, so the dock goes first and then the second row.
         static let heightForDock: CGFloat = 470
